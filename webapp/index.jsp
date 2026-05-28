@@ -643,36 +643,8 @@
         </div>
 
         <h2 class="section-title">Today's Habits</h2>
-        <div class="habits-grid">
-            <div class="habit-card">
-                <div class="habit-header">
-                    <div class="habit-name">Morning Exercise</div>
-                    <div class="habit-xp">+25 XP</div>
-                </div>
-                <p style="color: var(--netflix-gray); margin-bottom: 15px;">Start your day with energy and focus</p>
-                <input type="checkbox" class="habit-checkbox" id="habit1" data-xp="25" style="transform: scale(1.2);">
-                <label for="habit1" style="color: var(--netflix-white); margin-left: 10px;">Mark as completed</label>
-            </div>
-            
-            <div class="habit-card">
-                <div class="habit-header">
-                    <div class="habit-name">Reading</div>
-                    <div class="habit-xp">+30 XP</div>
-                </div>
-                <p style="color: var(--netflix-gray); margin-bottom: 15px;">Read for at least 30 minutes</p>
-                <input type="checkbox" class="habit-checkbox" id="habit2" data-xp="30" style="transform: scale(1.2);">
-                <label for="habit2" style="color: var(--netflix-white); margin-left: 10px;">Mark as completed</label>
-            </div>
-            
-            <div class="habit-card">
-                <div class="habit-header">
-                    <div class="habit-name">Meditation</div>
-                    <div class="habit-xp">+20 XP</div>
-                </div>
-                <p style="color: var(--netflix-gray); margin-bottom: 15px;">10 minutes of mindfulness practice</p>
-                <input type="checkbox" class="habit-checkbox" id="habit3" data-xp="20" style="transform: scale(1.2);">
-                <label for="habit3" style="color: var(--netflix-white); margin-left: 10px;">Mark as completed</label>
-            </div>
+        <div class="habits-grid" id="dashboardHabitsContainer">
+            <!-- Dynamic habits will be loaded here -->
         </div>
     </div>
 
@@ -737,7 +709,7 @@
                 <div class="profile-avatar">K</div>
                 <h2 style="color: var(--netflix-white); margin-bottom: 10px;">Koushigan</h2>
                 <p style="color: var(--netflix-gray); margin-bottom: 20px;">Productivity Enthusiast</p>
-                <div style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
+                <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
                     Level 12
                 </div>
             </div>
@@ -763,19 +735,19 @@
                     <div class="stat-title">Statistics</div>
                     <div class="profile-detail">
                         <div class="detail-label">Total XP Earned</div>
-                        <div class="detail-value">1,250 XP</div>
+                        <div class="detail-value" id="profileTotalXP">1,250 XP</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Habits Completed</div>
-                        <div class="detail-value">47</div>
+                        <div class="detail-value" id="profileHabitsCompleted">47</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Diary Entries</div>
-                        <div class="detail-value">23</div>
+                        <div class="detail-value" id="profileDiaryEntriesCount">23</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Pomodoro Sessions</div>
-                        <div class="detail-value">89</div>
+                        <div class="detail-value" id="profilePomodorosCount">89</div>
                     </div>
                 </div>
                 
@@ -808,19 +780,19 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-title">This Week's XP</div>
-                <div class="stat-value">325</div>
+                <div class="stat-value" id="progressWeekXP">325</div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">Habits Completed</div>
-                <div class="stat-value">14</div>
+                <div class="stat-value" id="progressTotalHabits">14</div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">Productivity Score</div>
-                <div class="stat-value">87%</div>
+                <div class="stat-value" id="progressProductivityScore">87%</div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">Focus Time</div>
-                <div class="stat-value">12.5h</div>
+                <div class="stat-value" id="progressFocusTime">12.5h</div>
             </div>
         </div>
 
@@ -845,9 +817,8 @@
             </div>
         </div>
     </div>
-
     <script>
-        // Application State
+        // Application State with standard structures and date calculations
         const appState = {
             timer: {
                 running: false,
@@ -861,7 +832,9 @@
                 level: 12,
                 xp: 1250,
                 currentStreak: 7,
-                bestStreak: 21
+                bestStreak: 21,
+                lastActiveDate: null,
+                pomodoros: 89
             },
             habits: [
                 { id: 1, name: 'Morning Exercise', xp: 25, description: 'Start your day with energy and focus', completed: false },
@@ -874,26 +847,197 @@
                 { 
                     title: 'Productive Day', 
                     content: 'Completed all my habits today and finished the project ahead of schedule. Feeling accomplished!', 
-                    date: 'October 15, 2024 at 8:30 PM' 
+                    date: 'May 27, 2026 at 8:30 PM' 
                 },
                 { 
                     title: 'Learning New Things', 
                     content: 'Spent the day learning about new web technologies. The pomodoro technique really helped me stay focused.', 
-                    date: 'October 14, 2024 at 9:15 PM' 
+                    date: 'May 26, 2026 at 9:15 PM' 
                 },
                 { 
                     title: 'Weekend Planning', 
                     content: 'Planning my goals for the upcoming week. Need to focus more on consistency with my exercise routine.', 
-                    date: 'October 13, 2024 at 7:45 PM' 
+                    date: 'May 25, 2026 at 7:45 PM' 
                 }
-            ]
+            ],
+            history: {}
         };
+
+        // Helper date string mapping
+        function getLocalDateString(date = new Date()) {
+            const offset = date.getTimezoneOffset();
+            const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+            return localDate.toISOString().split('T')[0];
+        }
+
+        function getLocalDateOffsetString(offsetDays) {
+            const d = new Date();
+            d.setDate(d.getDate() - offsetDays);
+            const offset = d.getTimezoneOffset();
+            const localDate = new Date(d.getTime() - (offset * 60 * 1000));
+            return localDate.toISOString().split('T')[0];
+        }
+
+        // Initialize default mock history if not present
+        function initializeDefaultHistory() {
+            if (Object.keys(appState.history).length === 0) {
+                appState.history = {
+                    [getLocalDateOffsetString(1)]: { xp: 85, completedCount: 3, totalCount: 5 },
+                    [getLocalDateOffsetString(2)]: { xp: 60, completedCount: 2, totalCount: 5 },
+                    [getLocalDateOffsetString(3)]: { xp: 110, completedCount: 4, totalCount: 5 },
+                    [getLocalDateOffsetString(4)]: { xp: 30, completedCount: 1, totalCount: 5 },
+                    [getLocalDateOffsetString(5)]: { xp: 95, completedCount: 3, totalCount: 5 },
+                    [getLocalDateOffsetString(6)]: { xp: 75, completedCount: 2, totalCount: 5 },
+                    [getLocalDateOffsetString(7)]: { xp: 120, completedCount: 4, totalCount: 5 }
+                };
+            }
+        }
+
+        // Persistence Functions
+        function saveState() {
+            localStorage.setItem('streak7_app_state', JSON.stringify({
+                user: appState.user,
+                habits: appState.habits,
+                diaryEntries: appState.diaryEntries,
+                history: appState.history
+            }));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('streak7_app_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appState.user = { ...appState.user, ...parsed.user };
+                    appState.habits = parsed.habits || appState.habits;
+                    appState.diaryEntries = parsed.diaryEntries || [];
+                    appState.history = parsed.history || {};
+                } catch (e) {
+                    console.error("Error loading state", e);
+                }
+            }
+            initializeDefaultHistory();
+            checkDailyReset();
+        }
+
+        function checkDailyReset() {
+            const today = getLocalDateString();
+            const lastActive = appState.user.lastActiveDate;
+            
+            if (lastActive && lastActive !== today) {
+                // Reset habit completion tags for the new day
+                appState.habits.forEach(h => h.completed = false);
+                
+                // Verify if streak is broken
+                const yesterdayObj = new Date();
+                yesterdayObj.setDate(yesterdayObj.getDate() - 1);
+                const yesterday = getLocalDateString(yesterdayObj);
+                
+                const yesterdayHistory = appState.history[yesterday];
+                const completedYesterday = yesterdayHistory && yesterdayHistory.completedCount > 0;
+                
+                if (!completedYesterday && lastActive !== yesterday) {
+                    appState.user.currentStreak = 0;
+                }
+            }
+            appState.user.lastActiveDate = today;
+            saveState();
+        }
+
+        function recordHistory(xpGained, isHabitCompletion = false) {
+            const today = getLocalDateString();
+            if (!appState.history[today]) {
+                appState.history[today] = { xp: 0, completedCount: 0, totalCount: appState.habits.length };
+            }
+            appState.history[today].xp += xpGained;
+            appState.history[today].totalCount = appState.habits.length;
+            if (isHabitCompletion) {
+                appState.history[today].completedCount++;
+            }
+            
+            if (isHabitCompletion && appState.history[today].completedCount === 1) {
+                updateStreak();
+            }
+            saveState();
+        }
+
+        function updateStreak() {
+            const today = getLocalDateString();
+            const yesterdayObj = new Date();
+            yesterdayObj.setDate(yesterdayObj.getDate() - 1);
+            const yesterday = getLocalDateString(yesterdayObj);
+            
+            const yesterdayHistory = appState.history[yesterday];
+            const completedYesterday = yesterdayHistory && yesterdayHistory.completedCount > 0;
+            
+            if (completedYesterday || appState.user.currentStreak === 0) {
+                appState.user.currentStreak++;
+            } else {
+                appState.user.currentStreak = 1;
+            }
+            
+            if (appState.user.currentStreak > appState.user.bestStreak) {
+                appState.user.bestStreak = appState.user.currentStreak;
+            }
+        }
+
+        function handleHabitUncompletion(xpValue, habitId) {
+            const today = getLocalDateString();
+            const habit = appState.habits.find(h => h.id === habitId);
+            if (habit && habit.completed) {
+                habit.completed = false;
+                appState.user.xp = Math.max(0, appState.user.xp - xpValue);
+                
+                if (appState.history[today]) {
+                    appState.history[today].xp = Math.max(0, appState.history[today].xp - xpValue);
+                    appState.history[today].completedCount = Math.max(0, appState.history[today].completedCount - 1);
+                    if (appState.history[today].completedCount === 0) {
+                        recalculateStreak();
+                    }
+                }
+                
+                appState.user.level = Math.floor(appState.user.xp / 100) + 1;
+                
+                saveState();
+                updateUI();
+                renderDashboardHabits();
+                renderHabits();
+                generateGraphs();
+                generateHeatmap();
+            }
+        }
+
+        function recalculateStreak() {
+            let streak = 0;
+            let checkDate = new Date();
+            
+            while (true) {
+                const dateStr = getLocalDateString(checkDate);
+                const dayHistory = appState.history[dateStr];
+                if (dayHistory && dayHistory.completedCount > 0) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    if (dateStr === getLocalDateString()) {
+                        checkDate.setDate(checkDate.getDate() - 1);
+                        continue;
+                    }
+                    break;
+                }
+            }
+            appState.user.currentStreak = streak;
+            if (streak > appState.user.bestStreak) {
+                appState.user.bestStreak = streak;
+            }
+        }
 
         // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
+            loadState();
             initializeApp();
             setupEventListeners();
             updateUI();
+            renderDashboardHabits();
             renderHabits();
             renderDiaryEntries();
             generateHeatmap();
@@ -901,7 +1045,6 @@
         });
 
         function initializeApp() {
-            // Set up header scroll effect
             window.addEventListener('scroll', function() {
                 const header = document.getElementById('mainHeader');
                 if (window.scrollY > 100) {
@@ -911,24 +1054,18 @@
                 }
             });
 
-            // Initialize timer display
             updateTimerDisplay();
         }
 
         function setupEventListeners() {
-            // Timer controls
             document.getElementById('startTimer').addEventListener('click', toggleTimer);
             document.getElementById('resetTimer').addEventListener('click', resetTimer);
             
-            // Navigation tabs
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.addEventListener('click', handleTabNavigation);
             });
             
-            // Habit management
             document.getElementById('addHabitBtn').addEventListener('click', addNewHabit);
-            
-            // Diary
             document.getElementById('saveEntry').addEventListener('click', saveDiaryEntry);
         }
 
@@ -984,6 +1121,9 @@
             document.getElementById('timerDisplay').classList.remove('pulse');
             
             showNotification('Pomodoro session completed! Time for a break. 🎉', 'success');
+            appState.user.pomodoros = (appState.user.pomodoros || 0) + 1;
+            saveState();
+            
             awardXP(15);
         }
 
@@ -997,21 +1137,52 @@
             const tab = event.target;
             const tabId = tab.getAttribute('data-tab');
             
-            // Remove active class from all tabs and content
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            // Add active class to clicked tab
             tab.classList.add('active');
-            
-            // Show corresponding content
             document.getElementById(`${tabId}-tab`).classList.add('active');
         }
 
-        // Habit Functions
+        // Habits Functions
+        function renderDashboardHabits() {
+            const container = document.getElementById('dashboardHabitsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if (appState.habits.length === 0) {
+                container.innerHTML = `<p style="color: var(--netflix-gray); grid-column: 1/-1; text-align: center; padding: 20px;">No habits added yet. Go to the Habits tab to create one!</p>`;
+                return;
+            }
+            
+            appState.habits.forEach(habit => {
+                const card = document.createElement('div');
+                card.className = 'habit-card';
+                card.innerHTML = `
+                    <div class="habit-header">
+                        <div class="habit-name">${habit.name}</div>
+                        <div class="habit-xp">+${habit.xp} XP</div>
+                    </div>
+                    <p style="color: var(--netflix-gray); margin-bottom: 15px;">${habit.description}</p>
+                    <input type="checkbox" class="habit-checkbox" id="dash-habit-${habit.id}" data-xp="${habit.xp}" data-habit-id="${habit.id}" ${habit.completed ? 'checked' : ''} style="transform: scale(1.2);">
+                    <label for="dash-habit-${habit.id}" style="color: var(--netflix-white); margin-left: 10px;">${habit.completed ? 'Completed!' : 'Mark as completed'}</label>
+                `;
+                container.appendChild(card);
+                
+                const checkbox = card.querySelector('.habit-checkbox');
+                checkbox.addEventListener('change', handleHabitCompletionToggle);
+            });
+        }
+
         function renderHabits() {
             const container = document.getElementById('habitsContainer');
+            if (!container) return;
             container.innerHTML = '';
+            
+            if (appState.habits.length === 0) {
+                container.innerHTML = `<p style="color: var(--netflix-gray); grid-column: 1/-1; text-align: center; padding: 20px;">No habits created yet. Use the form above to add one!</p>`;
+                return;
+            }
             
             appState.habits.forEach(habit => {
                 const habitCard = document.createElement('div');
@@ -1023,18 +1194,17 @@
                     </div>
                     <p style="color: var(--netflix-gray); margin-bottom: 15px;">${habit.description}</p>
                     <input type="checkbox" class="habit-checkbox" id="habit-${habit.id}" data-xp="${habit.xp}" data-habit-id="${habit.id}" ${habit.completed ? 'checked' : ''} style="transform: scale(1.2);">
-                    <label for="habit-${habit.id}" style="color: var(--netflix-white); margin-left: 10px;">Mark as completed</label>
-                    <button class="btn btn-secondary" onclick="removeHabit(${habit.id})" style="margin-top: 15px; padding: 8px 16px; font-size: 0.8rem;">Remove</button>
+                    <label for="habit-${habit.id}" style="color: var(--netflix-white); margin-left: 10px;">${habit.completed ? 'Completed!' : 'Mark as completed'}</label>
+                    <button class="btn btn-secondary" onclick="removeHabit(${habit.id})" style="margin-top: 15px; padding: 8px 16px; font-size: 0.8rem; border-color: var(--netflix-red); color: var(--netflix-red);">Remove Habit</button>
                 `;
                 container.appendChild(habitCard);
                 
-                // Add event listener for the checkbox
                 const checkbox = habitCard.querySelector('.habit-checkbox');
-                checkbox.addEventListener('change', handleHabitCompletion);
+                checkbox.addEventListener('change', handleHabitCompletionToggle);
             });
         }
 
-        function handleHabitCompletion(event) {
+        function handleHabitCompletionToggle(event) {
             const checkbox = event.target;
             const xpValue = parseInt(checkbox.getAttribute('data-xp'));
             const habitId = parseInt(checkbox.getAttribute('data-habit-id'));
@@ -1043,15 +1213,15 @@
                 const habit = appState.habits.find(h => h.id === habitId);
                 if (habit && !habit.completed) {
                     habit.completed = true;
-                    awardXP(xpValue);
+                    awardXP(xpValue, true);
                     showXPEarnedAnimation(checkbox, xpValue);
                     showNotification(`Completed: ${habit.name}! +${xpValue} XP earned`, 'success');
+                    saveState();
+                    renderDashboardHabits();
+                    renderHabits();
                 }
             } else {
-                const habit = appState.habits.find(h => h.id === habitId);
-                if (habit) {
-                    habit.completed = false;
-                }
+                handleHabitUncompletion(xpValue, habitId);
             }
         }
 
@@ -1070,7 +1240,7 @@
             }
             
             const newHabit = {
-                id: Date.now(), // Simple ID generation
+                id: Date.now(),
                 name: name,
                 xp: xp,
                 description: description,
@@ -1078,9 +1248,10 @@
             };
             
             appState.habits.push(newHabit);
+            saveState();
             renderHabits();
+            renderDashboardHabits();
             
-            // Clear form
             nameInput.value = '';
             xpInput.value = '';
             descInput.value = '';
@@ -1090,13 +1261,16 @@
 
         function removeHabit(habitId) {
             appState.habits = appState.habits.filter(h => h.id !== habitId);
+            saveState();
             renderHabits();
+            renderDashboardHabits();
             showNotification('Habit removed', 'info');
         }
 
         // Diary Functions
         function renderDiaryEntries() {
             const container = document.getElementById('diaryEntries');
+            if (!container) return;
             container.innerHTML = '';
             
             appState.diaryEntries.forEach(entry => {
@@ -1141,9 +1315,9 @@
             };
             
             appState.diaryEntries.unshift(newEntry);
+            saveState();
             renderDiaryEntries();
             
-            // Clear form
             titleInput.value = '';
             contentInput.value = '';
             
@@ -1154,24 +1328,39 @@
         // Progress Visualization
         function generateHeatmap() {
             const heatmap = document.getElementById('activityHeatmap');
+            if (!heatmap) return;
             heatmap.innerHTML = '';
             
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const activityLevels = [3, 2, 1, 0, 2, 3, 1]; // Example data
+            // Last 28 days heatmap
+            const days = [];
+            for (let i = 27; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d);
+            }
             
-            days.forEach((day, index) => {
+            days.forEach(day => {
+                const dateStr = getLocalDateString(day);
+                const dayHistory = appState.history[dateStr];
+                const completed = dayHistory ? dayHistory.completedCount : 0;
+                
                 const dayElement = document.createElement('div');
                 dayElement.className = 'heatmap-day';
-                dayElement.textContent = day;
                 
-                const level = activityLevels[index];
-                if (level > 0) {
+                const options = { month: 'short', day: 'numeric' };
+                const formattedDate = day.toLocaleDateString('en-US', options);
+                dayElement.title = `${formattedDate}: ${completed} habit${completed === 1 ? '' : 's'} completed`;
+                
+                if (completed > 0) {
                     dayElement.classList.add('active');
-                    if (level === 3) dayElement.classList.add('high');
-                    else if (level === 2) dayElement.classList.add('medium');
-                    else if (level === 1) dayElement.classList.add('low');
+                    if (completed >= 4) {
+                        dayElement.classList.add('high');
+                    } else if (completed >= 2) {
+                        dayElement.classList.add('medium');
+                    } else {
+                        dayElement.classList.add('low');
+                    }
                 }
-                
                 heatmap.appendChild(dayElement);
             });
         }
@@ -1183,23 +1372,49 @@
 
         function generateXPGraph() {
             const graph = document.getElementById('xpGraph');
+            if (!graph) return;
             graph.innerHTML = '';
             
-            // Sample XP data for last 7 days
-            const xpData = [45, 60, 30, 75, 90, 50, 65];
-            const maxXP = Math.max(...xpData);
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d);
+            }
             
-            xpData.forEach((xp, index) => {
+            const xpData = days.map(day => {
+                const dateStr = getLocalDateString(day);
+                return appState.history[dateStr] ? appState.history[dateStr].xp : 0;
+            });
+            
+            const maxXP = Math.max(...xpData, 10);
+            
+            days.forEach((day, index) => {
+                const xp = xpData[index];
                 const bar = document.createElement('div');
                 bar.className = 'graph-bar';
-                const width = (100 / xpData.length) * 0.8;
+                const width = (100 / days.length) * 0.8;
                 const height = (xp / maxXP) * 100;
-                const left = (index * (100 / xpData.length)) + (width * 0.1);
+                const left = (index * (100 / days.length)) + (width * 0.1);
                 
                 bar.style.width = `${width}%`;
-                bar.style.height = `${height}%`;
+                bar.style.height = `${Math.max(5, height)}%`;
                 bar.style.left = `${left}%`;
                 bar.style.background = `linear-gradient(to top, var(--netflix-red), var(--accent))`;
+                
+                const weekday = day.toLocaleDateString('en-US', { weekday: 'short' });
+                bar.title = `${weekday}: ${xp} XP`;
+                
+                // Add value text label inside or above the bar
+                const label = document.createElement('span');
+                label.style.position = 'absolute';
+                label.style.top = '-20px';
+                label.style.left = '50%';
+                label.style.transform = 'translateX(-50%)';
+                label.style.fontSize = '0.75rem';
+                label.style.color = 'var(--netflix-gray)';
+                label.textContent = xp > 0 ? xp : '';
+                bar.appendChild(label);
                 
                 graph.appendChild(bar);
             });
@@ -1207,33 +1422,59 @@
 
         function generateHabitsGraph() {
             const graph = document.getElementById('habitsGraph');
+            if (!graph) return;
             graph.innerHTML = '';
             
-            // Sample completion data for last 7 days
-            const completionData = [80, 60, 90, 70, 85, 75, 95];
-            const maxCompletion = Math.max(...completionData);
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d);
+            }
             
-            completionData.forEach((completion, index) => {
+            const rates = days.map(day => {
+                const dateStr = getLocalDateString(day);
+                const dayHistory = appState.history[dateStr];
+                if (dayHistory && dayHistory.totalCount > 0) {
+                    return (dayHistory.completedCount / dayHistory.totalCount) * 100;
+                }
+                return 0;
+            });
+            
+            days.forEach((day, index) => {
+                const rate = rates[index];
                 const bar = document.createElement('div');
                 bar.className = 'graph-bar';
-                const width = (100 / completionData.length) * 0.8;
-                const height = (completion / maxCompletion) * 100;
-                const left = (index * (100 / completionData.length)) + (width * 0.1);
+                const width = (100 / days.length) * 0.8;
+                const height = rate;
+                const left = (index * (100 / days.length)) + (width * 0.1);
                 
                 bar.style.width = `${width}%`;
-                bar.style.height = `${height}%`;
+                bar.style.height = `${Math.max(5, height)}%`;
                 bar.style.left = `${left}%`;
                 bar.style.background = `linear-gradient(to top, var(--info), var(--success))`;
+                
+                const weekday = day.toLocaleDateString('en-US', { weekday: 'short' });
+                bar.title = `${weekday}: ${Math.round(rate)}% Completion`;
+                
+                const label = document.createElement('span');
+                label.style.position = 'absolute';
+                label.style.top = '-20px';
+                label.style.left = '50%';
+                label.style.transform = 'translateX(-50%)';
+                label.style.fontSize = '0.75rem';
+                label.style.color = 'var(--netflix-gray)';
+                label.textContent = rate > 0 ? `${Math.round(rate)}%` : '';
+                bar.appendChild(label);
                 
                 graph.appendChild(bar);
             });
         }
 
         // Utility Functions
-        function awardXP(amount) {
+        function awardXP(amount, isHabit = false) {
             appState.user.xp += amount;
             
-            // Check for level up (every 100 XP)
             const newLevel = Math.floor(appState.user.xp / 100) + 1;
             if (newLevel > appState.user.level) {
                 appState.user.level = newLevel;
@@ -1241,14 +1482,80 @@
                 showNotification(`🎉 Congratulations! You reached Level ${newLevel}!`, 'success');
             }
             
+            recordHistory(amount, isHabit);
             updateUI();
+            generateGraphs();
+            generateHeatmap();
         }
 
         function updateUI() {
-            document.getElementById('currentStreak').textContent = `${appState.user.currentStreak} days`;
+            document.getElementById('currentStreak').textContent = `${appState.user.currentStreak} day${appState.user.currentStreak === 1 ? '' : 's'}`;
             document.getElementById('totalXP').textContent = appState.user.xp.toLocaleString();
             document.getElementById('userLevel').textContent = appState.user.level;
-            document.getElementById('bestStreak').textContent = `${appState.user.bestStreak} days`;
+            document.getElementById('bestStreak').textContent = `${appState.user.bestStreak} day${appState.user.bestStreak === 1 ? '' : 's'}`;
+            
+            const levelTag = document.getElementById('profileLevelTag');
+            if (levelTag) levelTag.textContent = `Level ${appState.user.level}`;
+            
+            const profileXP = document.getElementById('profileTotalXP');
+            if (profileXP) profileXP.textContent = `${appState.user.xp.toLocaleString()} XP`;
+            
+            const profileHabits = document.getElementById('profileHabitsCompleted');
+            if (profileHabits) {
+                let totalCompleted = 0;
+                Object.values(appState.history).forEach(h => {
+                    totalCompleted += h.completedCount || 0;
+                });
+                profileHabits.textContent = totalCompleted;
+            }
+            
+            const profileDiary = document.getElementById('profileDiaryEntriesCount');
+            if (profileDiary) profileDiary.textContent = appState.diaryEntries.length;
+            
+            const profilePomodoro = document.getElementById('profilePomodorosCount');
+            if (profilePomodoro) profilePomodoro.textContent = appState.user.pomodoros || 0;
+            
+            const progressWeekXP = document.getElementById('progressWeekXP');
+            if (progressWeekXP) {
+                let weekXP = 0;
+                for (let i = 0; i < 7; i++) {
+                    const dateStr = getLocalDateOffsetString(i);
+                    weekXP += appState.history[dateStr] ? appState.history[dateStr].xp : 0;
+                }
+                progressWeekXP.textContent = weekXP;
+            }
+            
+            const progressTotalHabits = document.getElementById('progressTotalHabits');
+            if (progressTotalHabits) {
+                let totalCompleted = 0;
+                Object.values(appState.history).forEach(h => {
+                    totalCompleted += h.completedCount || 0;
+                });
+                progressTotalHabits.textContent = totalCompleted;
+            }
+            
+            const progressProductivity = document.getElementById('progressProductivityScore');
+            if (progressProductivity) {
+                let totalRate = 0;
+                let daysCount = 0;
+                for (let i = 0; i < 7; i++) {
+                    const dateStr = getLocalDateOffsetString(i);
+                    const hist = appState.history[dateStr];
+                    if (hist && hist.totalCount > 0) {
+                        totalRate += (hist.completedCount / hist.totalCount);
+                        daysCount++;
+                    }
+                }
+                const score = daysCount > 0 ? Math.round((totalRate / daysCount) * 100) : 0;
+                progressProductivity.textContent = `${score}%`;
+            }
+            
+            const progressFocus = document.getElementById('progressFocusTime');
+            if (progressFocus) {
+                const pomodoros = appState.user.pomodoros || 0;
+                const hours = ((pomodoros * 25) / 60).toFixed(1);
+                progressFocus.textContent = `${hours}h`;
+            }
         }
 
         function showXPEarnedAnimation(element, xp) {
@@ -1260,18 +1567,15 @@
             xpElement.style.top = `${rect.top}px`;
             
             document.body.appendChild(xpElement);
-            
-            // Animate
             xpElement.style.animation = 'floatUp 1s ease-out forwards';
             
-            // Remove after animation
             setTimeout(() => {
                 xpElement.remove();
             }, 1000);
         }
 
         function showLevelUpAnimation() {
-            const levelElement = document.querySelector('.profile-level');
+            const levelElement = document.getElementById('profileLevelTag');
             if (levelElement) {
                 levelElement.classList.add('level-up');
                 setTimeout(() => {
@@ -1281,7 +1585,6 @@
         }
 
         function showNotification(message, type = 'info') {
-            // Remove existing notifications
             const existingNotification = document.querySelector('.notification');
             if (existingNotification) {
                 existingNotification.remove();
@@ -1291,7 +1594,6 @@
             notification.className = `notification`;
             notification.textContent = message;
             
-            // Set background color based on type
             const colors = {
                 success: '#2ecc71',
                 error: '#e74c3c',
@@ -1300,10 +1602,8 @@
             };
             
             notification.style.backgroundColor = colors[type] || colors.info;
-            
             document.body.appendChild(notification);
             
-            // Auto remove after 4 seconds
             setTimeout(() => {
                 notification.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
