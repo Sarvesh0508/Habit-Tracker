@@ -594,7 +594,7 @@
     <header class="netflix-header" id="mainHeader">
         <div class="logo">STREAK7</div>
         <div class="user-menu">
-            <div class="profile-avatar" style="width: 40px; height: 40px; font-size: 1rem;">K</div>
+            <div class="profile-avatar" id="headerAvatar" style="width: 40px; height: 40px; font-size: 1rem;">S</div>
         </div>
     </header>
 
@@ -610,7 +610,7 @@
     <!-- Home Tab Content -->
     <div class="tab-content active" id="home-tab">
         <div class="hero-section">
-            <h1 class="hero-title">Welcome Back, Koushigan!</h1>
+            <h1 class="hero-title" id="welcomeTitle">Welcome Back, Sarvesh!</h1>
             <p class="hero-subtitle">Track your productivity, build better habits, and level up your life. Let's make today count!</p>
             
             <div class="stats-grid">
@@ -706,8 +706,8 @@
         
         <div class="profile-container">
             <div class="profile-sidebar">
-                <div class="profile-avatar">K</div>
-                <h2 style="color: var(--netflix-white); margin-bottom: 10px;">Koushigan</h2>
+                <div class="profile-avatar" id="profileAvatar">S</div>
+                <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Sarvesh</h2>
                 <p style="color: var(--netflix-gray); margin-bottom: 20px;">Productivity Enthusiast</p>
                 <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
                     Level 12
@@ -719,11 +719,11 @@
                     <div class="stat-title">Personal Information</div>
                     <div class="profile-detail">
                         <div class="detail-label">Full Name</div>
-                        <div class="detail-value">Koushigan S</div>
+                        <div class="detail-value" id="profileFullNameDetail">Sarvesh Kumar</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Email</div>
-                        <div class="detail-value">koushigans514@gmail.com</div>
+                        <div class="detail-value" id="profileEmailDetail">sarvesh@example.com</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Member Since</div>
@@ -827,8 +827,8 @@
                 interval: null
             },
             user: {
-                name: 'Koushigan',
-                email: 'koushigans514@gmail.com',
+                name: 'Sarvesh',
+                email: 'sarvesh@example.com',
                 level: 12,
                 xp: 1250,
                 currentStreak: 7,
@@ -912,6 +912,13 @@
                     appState.habits = parsed.habits || appState.habits;
                     appState.diaryEntries = parsed.diaryEntries || [];
                     appState.history = parsed.history || {};
+                    
+                    // Auto-migrate old cached username to Sarvesh
+                    if (appState.user.name === 'Koushigan') {
+                        appState.user.name = 'Sarvesh';
+                        appState.user.email = 'sarvesh@example.com';
+                        saveState();
+                    }
                 } catch (e) {
                     console.error("Error loading state", e);
                 }
@@ -1556,6 +1563,27 @@
                 const hours = ((pomodoros * 25) / 60).toFixed(1);
                 progressFocus.textContent = `${hours}h`;
             }
+
+            // User profile dynamic rendering
+            const firstLetter = appState.user.name.charAt(0).toUpperCase();
+            
+            const headerAvatar = document.getElementById('headerAvatar');
+            if (headerAvatar) headerAvatar.textContent = firstLetter;
+            
+            const welcomeTitle = document.getElementById('welcomeTitle');
+            if (welcomeTitle) welcomeTitle.textContent = `Welcome Back, ${appState.user.name}!`;
+            
+            const profileAvatar = document.getElementById('profileAvatar');
+            if (profileAvatar) profileAvatar.textContent = firstLetter;
+            
+            const profileName = document.getElementById('profileName');
+            if (profileName) profileName.textContent = appState.user.name;
+            
+            const profileFullNameDetail = document.getElementById('profileFullNameDetail');
+            if (profileFullNameDetail) profileFullNameDetail.textContent = appState.user.name;
+            
+            const profileEmailDetail = document.getElementById('profileEmailDetail');
+            if (profileEmailDetail) profileEmailDetail.textContent = appState.user.email;
         }
 
         function showXPEarnedAnimation(element, xp) {
