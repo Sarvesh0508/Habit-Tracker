@@ -1127,6 +1127,48 @@
                 padding: 20px !important;
             }
         }
+
+        /* Overhauled layout styles */
+        .dashboard-grid-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .dashboard-grid-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .achievement-badge-card {
+            border-color: var(--mockup-border) !important;
+        }
+        .achievement-badge-card:not(.locked)#badgeStreak {
+            border-color: #ff4a5a !important;
+            box-shadow: 0 0 10px rgba(255, 74, 90, 0.2);
+            background: rgba(255, 74, 90, 0.05) !important;
+        }
+        .achievement-badge-card:not(.locked)#badgeNight {
+            border-color: #b55aff !important;
+            box-shadow: 0 0 10px rgba(181, 90, 255, 0.2);
+            background: rgba(181, 90, 255, 0.05) !important;
+        }
+        .achievement-badge-card:not(.locked)#badgeEarly {
+            border-color: #ffd25a !important;
+            box-shadow: 0 0 10px rgba(255, 210, 90, 0.2);
+            background: rgba(255, 210, 90, 0.05) !important;
+        }
+        .achievement-badge-card:not(.locked)#badgeTenStreak {
+            border-color: #ff8f5a !important;
+            box-shadow: 0 0 10px rgba(255, 143, 90, 0.2);
+            background: rgba(255, 143, 90, 0.05) !important;
+        }
+        @media (max-width: 992px) {
+            .dashboard-grid-top, .dashboard-grid-bottom {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1178,185 +1220,178 @@
             <button class="btn btn-primary" id="startStreakBtn" style="background: #ff4a5a; border: none; padding: 12px 24px; font-weight: bold; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;"><i class="fas fa-play" style="margin-right: 6px;"></i> Start Your Streak</button>
         </div>
 
-        <!-- Dashboard Grid Layout -->
-        <div class="dashboard-grid">
-            <!-- Left Column: Habits checklist, Streak Summary, Quick Journal -->
+        <!-- Top Grid: 2 Columns (Habits/Streaks on Left, Charts/Heatmap on Right) -->
+        <div class="dashboard-grid-top">
+            <!-- Left Column: Habits & Streak Summary -->
             <div class="dashboard-col">
                 <!-- Daily Habits Checklist Card -->
-                <div class="mockup-card">
-                    <div class="mockup-card-title" id="dailyHabitsTitle">
-                        DAILY HABITS - TODAY
-                    </div>
-                    <div id="dashboardHabitsContainer">
+                <div class="mockup-card" style="flex: 1; display: flex; flex-direction: column;">
+                    <div class="mockup-card-title" id="dailyHabitsTitle">DAILY HABITS - TODAY</div>
+                    <div id="dashboardHabitsContainer" style="display: flex; flex-direction: column; gap: 12px;">
                         <!-- Dynamic habit rows will be loaded here by JavaScript -->
                     </div>
                 </div>
 
                 <!-- Streak Summary Card -->
-                <div class="mockup-card">
+                <div class="mockup-card" style="margin-top: 20px;">
                     <div class="mockup-card-title">STREAK SUMMARY</div>
-                    <div class="summary-grid">
+                    <div class="summary-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center;">
                         <div>
-                            <div class="summary-stat-val" id="currentStreak">0 days</div>
-                            <div class="summary-stat-lbl">Current</div>
-                        </div>
-                        <div>
-                            <div class="summary-stat-val" id="bestStreak">0 days</div>
-                            <div class="summary-stat-lbl">Longest</div>
+                            <div class="summary-stat-val" id="currentStreak" style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: #ffffff;">0 days</div>
+                            <div class="summary-stat-lbl" style="font-size: 0.75rem; color: var(--mockup-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Current</div>
                         </div>
                         <div>
-                            <div class="summary-stat-val" id="totalXP">0</div>
-                            <div class="summary-stat-lbl">Total XP</div>
+                            <div class="summary-stat-val" id="bestStreak" style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: #ffffff;">0 days</div>
+                            <div class="summary-stat-lbl" style="font-size: 0.75rem; color: var(--mockup-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Longest</div>
                         </div>
                         <div>
-                            <div class="summary-stat-val" id="habitAvgCompletions">0.0</div>
-                            <div class="summary-stat-lbl">Average/Day</div>
+                            <div class="summary-stat-val" id="totalXP" style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: #ffffff;">0</div>
+                            <div class="summary-stat-lbl" style="font-size: 0.75rem; color: var(--mockup-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Total XP</div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Level Achievements & Badges -->
-                <div class="mockup-card">
-                    <div class="mockup-card-title" id="achievementsTitle">LEVEL 1 ACHIEVEMENTS</div>
-                    
-                    <!-- XP progress bar -->
-                    <div style="margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #ffffff;">
-                            <span id="nextLevelTag">Level 2</span>
-                            <span id="levelXPPercent">0%</span>
+                        <div>
+                            <div class="summary-stat-val" id="habitAvgCompletions" style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: #ffffff;">0.0</div>
+                            <div class="summary-stat-lbl" style="font-size: 0.75rem; color: var(--mockup-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Average/Day</div>
                         </div>
-                        <div style="width: 100%; height: 8px; background: #1c2128; border-radius: 4px; overflow: hidden; position: relative;">
-                            <div style="height: 100%; background: var(--mockup-red); width: 0%; transition: width 0.3s;" id="levelProgressFill"></div>
-                        </div>
-                        <div style="text-align: right; font-size: 0.75rem; color: var(--mockup-gray); margin-top: 5px;" id="levelXPRatio">
-                            0 / 100 XP
-                        </div>
-                    </div>
-
-                    <!-- Badges -->
-                    <div class="badges-grid" id="achievementsBadgesContainer">
-                        <div class="achievement-badge-card locked" id="badgeStreak">
-                            <div class="achievement-badge-icon"><i class="fas fa-fire"></i></div>
-                            <div class="achievement-badge-name">Consistency Champ</div>
-                        </div>
-                        <div class="achievement-badge-card locked" id="badgeNight">
-                            <div class="achievement-badge-icon"><i class="fas fa-moon"></i></div>
-                            <div class="achievement-badge-name">Night Owl</div>
-                        </div>
-                        <div class="achievement-badge-card locked" id="badgeEarly">
-                            <div class="achievement-badge-icon"><i class="fas fa-sun"></i></div>
-                            <div class="achievement-badge-name">Early Riser</div>
-                        </div>
-                        <div class="achievement-badge-card locked" id="badgeTenStreak">
-                            <div class="achievement-badge-icon"><i class="fas fa-trophy"></i></div>
-                            <div class="achievement-badge-name">10-Day Streak</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Journal / Reflections Card -->
-                <div class="mockup-card">
-                    <div class="mockup-card-title">QUICK JOURNAL / REFLECTIONS</div>
-                    <input type="text" class="journal-input" id="quickJournalTitle" placeholder="Reflection Title (Optional)...">
-                    <textarea class="journal-textarea" id="quickJournalContent" rows="3" placeholder="Write down your daily thoughts and reflections..."></textarea>
-                    <button class="btn btn-primary" id="saveQuickJournalBtn" style="width: 100%; padding: 10px; border-radius: 6px; font-size: 0.85rem;"><i class="fas fa-save"></i> Save Reflection</button>
-                    
-                    <div class="quick-journal-preview">
-                        <div class="reflection-preview-title" id="recentJournalTitle">No recent entries</div>
-                        <div class="reflection-preview-body" id="recentJournalContent">Reflections you log will show up here as a quick preview.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Progress Overview, Heatmap, Circular Timer, Achievements -->
+            <!-- Right Column: Progress Overview & Activity Heatmap -->
             <div class="dashboard-col">
                 <!-- Progress Overview Chart -->
-                <div class="mockup-card">
+                <div class="mockup-card" style="flex: 1; display: flex; flex-direction: column;">
                     <div class="mockup-card-title" id="progressOverviewTitle">PROGRESS OVERVIEW</div>
-                    <div class="progress-chart-bars" id="weeklyProgressBars">
-                        <!-- Bars dynamically loaded by JavaScript -->
+                    <div style="display: flex; gap: 15px; height: 180px; align-items: flex-end; margin-top: auto;">
+                        <!-- Y-Axis Labels -->
+                        <div class="progress-chart-y-axis" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; color: var(--mockup-gray); font-size: 0.8rem; font-weight: 600; padding-bottom: 2px;">
+                            <span>5</span>
+                            <span>4</span>
+                            <span>3</span>
+                            <span>2</span>
+                            <span>1</span>
+                            <span>0</span>
+                        </div>
+                        <!-- Bars Container -->
+                        <div style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+                            <div class="progress-chart-bars" id="weeklyProgressBars" style="display: flex; justify-content: space-between; align-items: flex-end; height: 100%; border-bottom: 2px solid var(--mockup-border); padding: 0 10px;">
+                                <!-- Bars dynamically loaded by JavaScript -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="progress-chart-labels" id="weeklyProgressLabels">
+                    <div class="progress-chart-labels" id="weeklyProgressLabels" style="display: flex; justify-content: space-between; margin-top: 8px; padding-left: 25px; padding-right: 10px;">
                         <!-- Labels dynamically loaded by JavaScript -->
                     </div>
                 </div>
 
                 <!-- Activity Heatmap -->
-                <div class="mockup-card">
+                <div class="mockup-card" style="margin-top: 20px;">
                     <div class="mockup-card-title" id="activityHeatmapTitle">ACTIVITY HEATMAP</div>
-                    <div class="heatmap-grid" id="dashboardHeatmapCells">
+                    <div class="heatmap-grid" id="dashboardHeatmapCells" style="display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(2, 1fr); gap: 6px; margin: 15px 0;">
                         <!-- Heatmap cells dynamically loaded by JavaScript -->
                     </div>
-                    <div class="heatmap-bottom-row">
+                    <div class="heatmap-bottom-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.8rem; color: var(--mockup-gray);">
                         <div id="heatmapStreakLabel">0 day current streak</div>
-                        <div class="heatmap-legends">
+                        <div class="heatmap-legends" style="display: flex; align-items: center; gap: 4px;">
                             <span style="margin-right: 4px;">Less</span>
-                            <div class="heatmap-legend-box level-0" style="background: #1c2128;"></div>
-                            <div class="heatmap-legend-box level-1" style="background: #3c1618;"></div>
-                            <div class="heatmap-legend-box level-2" style="background: #6b1d22;"></div>
-                            <div class="heatmap-legend-box level-3" style="background: #a82730;"></div>
-                            <div class="heatmap-legend-box level-4" style="background: #ff4a5a;"></div>
+                            <div class="heatmap-legend-box level-0" style="width: 10px; height: 10px; border-radius: 1px; background: #1c2128;"></div>
+                            <div class="heatmap-legend-box level-1" style="width: 10px; height: 10px; border-radius: 1px; background: #3c1618;"></div>
+                            <div class="heatmap-legend-box level-2" style="width: 10px; height: 10px; border-radius: 1px; background: #6b1d22;"></div>
+                            <div class="heatmap-legend-box level-3" style="width: 10px; height: 10px; border-radius: 1px; background: #a82730;"></div>
+                            <div class="heatmap-legend-box level-4" style="width: 10px; height: 10px; border-radius: 1px; background: #ff4a5a;"></div>
                             <span style="margin-left: 4px;">More</span>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Focus Timer with SVG circular countdown -->
-                <div class="mockup-card">
-                    <div class="mockup-card-title" id="focusTimerTitle">FOCUS TIMER - WORK SESSION</div>
-                    <div class="circular-timer-container">
-                        <div class="timer-svg-wrapper">
-                            <svg class="timer-svg" width="180" height="180" viewBox="0 0 180 180">
-                                <circle class="timer-svg-circle-bg" cx="90" cy="90" r="80"></circle>
-                                <circle class="timer-svg-circle-fg" id="timerSvgCircle" cx="90" cy="90" r="80" stroke-dasharray="502.6" stroke-dashoffset="0"></circle>
-                            </svg>
-                            <div class="timer-center-text">
-                                <div class="timer-countdown" id="timerDisplay">25:00</div>
-                                <div class="timer-countdown-lbl">Remaining</div>
-                            </div>
-                        </div>
-                        <div class="timer-status-text" id="timerStatusLabel">Focus Session (Work 25:00)</div>
-                        <div class="timer-controls" style="margin-top: 15px; width: 100%; display: flex; justify-content: center; gap: 10px;">
-                            <button class="btn btn-secondary" id="startTimer" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 4px;">Start Focus</button>
-                            <button class="btn btn-secondary" id="resetTimer" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 4px;">Reset</button>
-                            <button class="btn btn-primary" id="startShortBreakBtn" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 4px;">Short Break</button>
+        <!-- Bottom Grid: 3 Columns (Quick Journal, Focus Timer, Achievements) -->
+        <div class="dashboard-grid-bottom">
+            <!-- Column 1: Quick Journal / Reflections (Useful Feature replacing logo) -->
+            <div class="mockup-card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 350px; box-sizing: border-box;">
+                <div>
+                    <div class="mockup-card-title" style="margin-bottom: 12px;">QUICK JOURNAL / REFLECTIONS</div>
+                    <input type="text" class="journal-input" id="quickJournalTitle" placeholder="Reflection Title (Optional)..." style="width: 100%; background: #0d0f12; border: 1px solid var(--mockup-border); border-radius: 8px; color: #ffffff; padding: 8px 12px; font-size: 0.9rem; outline: none; margin-bottom: 8px; box-sizing: border-box;">
+                    <textarea class="journal-textarea" id="quickJournalContent" rows="2" placeholder="Write down your daily thoughts and reflections..." style="width: 100%; background: #0d0f12; border: 1px solid var(--mockup-border); border-radius: 8px; color: #ffffff; padding: 10px; font-size: 0.9rem; resize: none; outline: none; margin-bottom: 10px; box-sizing: border-box;"></textarea>
+                    <button class="btn btn-primary" id="saveQuickJournalBtn" style="width: 100%; padding: 10px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; background: var(--mockup-red); color: white; border: none; cursor: pointer;"><i class="fas fa-save" style="margin-right: 6px;"></i> Save Reflection</button>
+                </div>
+                
+                <div class="quick-journal-preview" style="border-top: 1px solid var(--mockup-border); margin-top: 12px; padding-top: 12px;">
+                    <div class="reflection-preview-title" id="recentJournalTitle" style="color: #ffffff; font-weight: 700; font-size: 0.9rem;">No recent entries</div>
+                    <div class="reflection-preview-body" id="recentJournalContent" style="color: var(--mockup-gray); font-size: 0.8rem; margin-top: 4px; line-height: 1.4;">Reflections you log will show up here as a quick preview.</div>
+                </div>
+            </div>
+
+            <!-- Column 2: Focus Timer -->
+            <div class="mockup-card" style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-height: 350px; box-sizing: border-box;">
+                <div class="mockup-card-title" style="width: 100%;" id="focusTimerTitle">FOCUS TIMER - WORK SESSION</div>
+                
+                <div class="circular-timer-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                    <div class="timer-svg-wrapper" style="position: relative; width: 150px; height: 150px;">
+                        <svg class="timer-svg" width="150" height="150" viewBox="0 0 180 180" style="transform: rotate(-90deg);">
+                            <circle class="timer-svg-circle-bg" cx="90" cy="90" r="80" style="fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 8px;"></circle>
+                            <circle class="timer-svg-circle-fg" id="timerSvgCircle" cx="90" cy="90" r="80" stroke-dasharray="502.6" stroke-dashoffset="0" style="fill: none; stroke: var(--mockup-red); stroke-width: 8px; stroke-linecap: round; transition: stroke-dashoffset 1s linear;"></circle>
+                        </svg>
+                        <div class="timer-center-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <div class="timer-countdown" id="timerDisplay" style="font-family: 'Outfit', monospace; font-size: 2.2rem; font-weight: 800; color: #ffffff;">25:00</div>
+                            <div class="timer-countdown-lbl" style="font-size: 0.75rem; color: var(--mockup-gray); text-transform: uppercase; letter-spacing: 1px;">Remaining</div>
                         </div>
                     </div>
                 </div>
-
                 
+                <div style="width: 100%; text-align: center;">
+                    <div class="timer-status-text" id="timerStatusLabel" style="color: var(--mockup-gray); font-weight: 600; font-size: 0.9rem; margin-bottom: 12px;">Focus Session (Work 25:00)</div>
+                    <div class="timer-controls" style="display: flex; justify-content: center; gap: 8px; width: 100%;">
+                        <button class="btn btn-secondary" id="startTimer" style="background: transparent; border: 1px solid var(--mockup-border); color: #ffffff; padding: 8px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s;">Start Focus</button>
+                        <button class="btn btn-secondary" id="resetTimer" style="background: transparent; border: 1px solid var(--mockup-border); color: #ffffff; padding: 8px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s;">Reset</button>
+                        <button class="btn btn-primary" id="startShortBreakBtn" style="background: var(--mockup-red); border: none; color: #ffffff; padding: 8px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s;">Short Break</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3: Achievements -->
+            <div class="mockup-card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 350px; box-sizing: border-box;">
+                <div class="mockup-card-title" id="achievementsTitle">LEVEL 1 ACHIEVEMENTS</div>
+                
+                <!-- XP progress bar -->
+                <div style="margin-bottom: 10px; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #ffffff;">
+                        <span id="nextLevelTag">Level 2</span>
+                        <span id="levelXPPercent">0%</span>
+                    </div>
+                    <div style="width: 100%; height: 8px; background: #1c2128; border-radius: 4px; overflow: hidden; position: relative;">
+                        <div style="height: 100%; background: var(--mockup-red); width: 0%; transition: width 0.3s;" id="levelProgressFill"></div>
+                    </div>
+                    <div style="text-align: right; font-size: 0.75rem; color: var(--mockup-gray); margin-top: 5px;" id="levelXPRatio">
+                        0 / 100 XP
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div style="width: 100%;">
+                    <div style="color: #ffffff; font-weight: bold; font-size: 0.95rem; margin-bottom: 10px; text-align: left;">Badges</div>
+                    <div class="badges-grid" id="achievementsBadgesContainer" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                        <div class="achievement-badge-card locked" id="badgeStreak" style="background: #1c2128; border: 1px solid var(--mockup-border); border-radius: 8px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: all 0.3s;">
+                            <div class="achievement-badge-icon" style="font-size: 1.4rem; color: #ff4a5a; margin-bottom: 4px;"><i class="fas fa-fire"></i></div>
+                            <div class="achievement-badge-name" style="font-size: 0.65rem; font-weight: 700; color: #ffffff; line-height: 1.2;">Consistency Champ</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeNight" style="background: #1c2128; border: 1px solid var(--mockup-border); border-radius: 8px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: all 0.3s;">
+                            <div class="achievement-badge-icon" style="font-size: 1.4rem; color: #b55aff; margin-bottom: 4px;"><i class="fas fa-moon"></i></div>
+                            <div class="achievement-badge-name" style="font-size: 0.65rem; font-weight: 700; color: #ffffff; line-height: 1.2;">Night Owl</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeEarly" style="background: #1c2128; border: 1px solid var(--mockup-border); border-radius: 8px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: all 0.3s;">
+                            <div class="achievement-badge-icon" style="font-size: 1.4rem; color: #ffd25a; margin-bottom: 4px;"><i class="fas fa-sun"></i></div>
+                            <div class="achievement-badge-name" style="font-size: 0.65rem; font-weight: 700; color: #ffffff; line-height: 1.2;">Early Riser</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeTenStreak" style="background: #1c2128; border: 1px solid var(--mockup-border); border-radius: 8px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: all 0.3s;">
+                            <div class="achievement-badge-icon" style="font-size: 1.4rem; color: #ff8f5a; margin-bottom: 4px;"><i class="fas fa-trophy"></i></div>
+                            <div class="achievement-badge-name" style="font-size: 0.65rem; font-weight: 700; color: #ffffff; line-height: 1.2;">10-Day Streak</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Habits Tab Content -->
-    <div class="tab-content" id="habits-tab">
-        <h1 class="section-title">Habit Tracker</h1>
-        <p style="color: var(--netflix-gray); margin-bottom: 30px; font-size: 1.1rem;">Build consistency and earn XP for your daily routines</p>
-
-        <div class="add-habit-form">
-            <h3 style="color: var(--netflix-white); margin-bottom: 20px;">Add New Habit</h3>
-            <div class="form-group">
-                <label class="form-label">Habit Name</label>
-                <input type="text" class="form-input" id="newHabitName" placeholder="e.g., Morning Journaling">
-            </div>
-            <div class="form-group">
-                <label class="form-label">XP Value</label>
-                <input type="number" class="form-input" id="newHabitXP" placeholder="e.g., 25" min="5" max="100">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-input" id="newHabitDesc" placeholder="Describe your habit..." rows="3"></textarea>
-            </div>
-            <button class="btn btn-primary" id="addHabitBtn">Add Habit</button>
-        </div>
-
-        <h3 style="color: var(--netflix-white); margin: 40px 0 20px;">Your Habits</h3>
-        <div class="habits-grid" id="habitsContainer">
-            <!-- Habits will be dynamically added here -->
-        </div>
-    </div>
-
     <!-- Diary Tab Content -->
     <div class="tab-content" id="diary-tab">
         <h1 class="section-title">Personal Diary</h1>
