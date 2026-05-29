@@ -1,5 +1,7 @@
 # 📊 Streak7 - Professional Gamified Habit Tracker & Productivity Suite
 
+**⚡ Live Demo:** [https://habit-tracker-ifzv.vercel.app/](https://habit-tracker-ifzv.vercel.app/)
+
 Streak7 is a modern, responsive, and feature-rich gamified productivity dashboard designed to help users establish habits, document daily reflections, and optimize focus using the Pomodoro technique. The project features full responsiveness, dynamic charts, progress analytics, and dual-mode persistence (browser LocalStorage for standalone use and a RESTful backend API).
 
 ---

@@ -628,19 +628,19 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-title">Current Streak</div>
-                    <div class="stat-value" id="currentStreak">7 days</div>
+                    <div class="stat-value" id="currentStreak">0 days</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-title">Total XP</div>
-                    <div class="stat-value" id="totalXP">1,250</div>
+                    <div class="stat-value" id="totalXP">0</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-title">Level</div>
-                    <div class="stat-value" id="userLevel">12</div>
+                    <div class="stat-value" id="userLevel">1</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-title">Best Streak</div>
-                    <div class="stat-value" id="bestStreak">21 days</div>
+                    <div class="stat-value" id="bestStreak">0 days</div>
                 </div>
             </div>
         </div>
@@ -722,7 +722,7 @@
                 <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Guest User</h2>
                 <p style="color: var(--netflix-gray); margin-bottom: 20px;">Productivity Enthusiast</p>
                 <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
-                    Level 12
+                    Level 1
                 </div>
             </div>
             
@@ -731,13 +731,13 @@
                     <div class="stat-title">Personal Information</div>
                     <div class="profile-detail">
                         <div class="detail-label">Full Name</div>
-                        <input type="text" id="profileFullNameInput" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
-                        <div class="detail-value" id="profileFullNameDetail">Sarvesh Kumar</div>
+                        <input type="text" id="profileFullNameInput" placeholder="Enter your name" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
+                        <div class="detail-value" id="profileFullNameDetail">Guest User</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Email</div>
-                        <input type="email" id="profileEmailInput" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
-                        <div class="detail-value" id="profileEmailDetail">sarvesh@example.com</div>
+                        <input type="email" id="profileEmailInput" placeholder="Enter your email" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
+                        <div class="detail-value" id="profileEmailDetail">guest@example.com</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Member Since</div>
@@ -754,19 +754,19 @@
                     <div class="stat-title">Statistics</div>
                     <div class="profile-detail">
                         <div class="detail-label">Total XP Earned</div>
-                        <div class="detail-value" id="profileTotalXP">1,250 XP</div>
+                        <div class="detail-value" id="profileTotalXP">0 XP</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Habits Completed</div>
-                        <div class="detail-value" id="profileHabitsCompleted">47</div>
+                        <div class="detail-value" id="profileHabitsCompleted">0</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Diary Entries</div>
-                        <div class="detail-value" id="profileDiaryEntriesCount">23</div>
+                        <div class="detail-value" id="profileDiaryEntriesCount">0</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Pomodoro Sessions</div>
-                        <div class="detail-value" id="profilePomodorosCount">89</div>
+                        <div class="detail-value" id="profilePomodorosCount">0</div>
                     </div>
                 </div>
                 
@@ -848,12 +848,12 @@
             user: {
                 name: 'Guest User',
                 email: 'guest@example.com',
-                level: 12,
-                xp: 1250,
-                currentStreak: 7,
-                bestStreak: 21,
+                level: 1,
+                xp: 0,
+                currentStreak: 0,
+                bestStreak: 0,
                 lastActiveDate: null,
-                pomodoros: 89
+                pomodoros: 0
             },
             habits: [
                 { id: 1, name: 'Morning Exercise', xp: 25, description: 'Start your day with energy and focus', completed: false },
@@ -862,23 +862,7 @@
                 { id: 4, name: 'Coding Practice', xp: 40, description: 'Work on coding projects', completed: false },
                 { id: 5, name: 'Evening Walk', xp: 15, description: '30 minute walk after dinner', completed: false }
             ],
-            diaryEntries: [
-                { 
-                    title: 'Productive Day', 
-                    content: 'Completed all my habits today and finished the project ahead of schedule. Feeling accomplished!', 
-                    date: 'May 27, 2026 at 8:30 PM' 
-                },
-                { 
-                    title: 'Learning New Things', 
-                    content: 'Spent the day learning about new web technologies. The pomodoro technique really helped me stay focused.', 
-                    date: 'May 26, 2026 at 9:15 PM' 
-                },
-                { 
-                    title: 'Weekend Planning', 
-                    content: 'Planning my goals for the upcoming week. Need to focus more on consistency with my exercise routine.', 
-                    date: 'May 25, 2026 at 7:45 PM' 
-                }
-            ],
+            diaryEntries: [],
             history: {}
         };
 
@@ -900,15 +884,7 @@
         // Initialize default mock history if not present
         function initializeDefaultHistory() {
             if (Object.keys(appState.history).length === 0) {
-                appState.history = {
-                    [getLocalDateOffsetString(1)]: { xp: 85, completedCount: 3, totalCount: 5 },
-                    [getLocalDateOffsetString(2)]: { xp: 60, completedCount: 2, totalCount: 5 },
-                    [getLocalDateOffsetString(3)]: { xp: 110, completedCount: 4, totalCount: 5 },
-                    [getLocalDateOffsetString(4)]: { xp: 30, completedCount: 1, totalCount: 5 },
-                    [getLocalDateOffsetString(5)]: { xp: 95, completedCount: 3, totalCount: 5 },
-                    [getLocalDateOffsetString(6)]: { xp: 75, completedCount: 2, totalCount: 5 },
-                    [getLocalDateOffsetString(7)]: { xp: 120, completedCount: 4, totalCount: 5 }
-                };
+                appState.history = {};
             }
         }
 
@@ -1110,8 +1086,8 @@
 
             if (editProfileBtn && saveProfileBtn && cancelProfileBtn && profileFullNameInput && profileEmailInput && profileFullNameDetail && profileEmailDetail) {
                 editProfileBtn.addEventListener('click', () => {
-                    profileFullNameInput.value = appState.user.name || 'Guest User';
-                    profileEmailInput.value = appState.user.email || 'guest@example.com';
+                    profileFullNameInput.value = (appState.user.name && appState.user.name !== 'Guest User') ? appState.user.name : '';
+                    profileEmailInput.value = (appState.user.email && appState.user.email !== 'guest@example.com') ? appState.user.email : '';
                     
                     profileFullNameInput.style.display = 'block';
                     profileEmailInput.style.display = 'block';
