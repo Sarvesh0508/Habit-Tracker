@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streak7</title>
+    <title>Streak7 - Gamified Productivity Tracker</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/checkmark--v1.png">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts (Inter & Outfit) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --netflix-black: #141414;
@@ -587,9 +593,487 @@
                 font-size: 3rem;
             }
         }
+        @keyframes loadingSpinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mockup Premium Layout & Theme Styling */
+        :root {
+            --mockup-bg: #0d0f12;
+            --mockup-card-bg: #15181e;
+            --mockup-border: #20252e;
+            --mockup-red: #ff4a5a;
+            --mockup-gray: #8c96a3;
+        }
+
+        body {
+            background: var(--mockup-bg) !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif !important;
+            color: var(--mockup-red) !important;
+            font-weight: 800 !important;
+        }
+
+        .netflix-header {
+            background: rgba(13, 15, 18, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--mockup-border);
+            padding: 15px 50px !important;
+        }
+
+        .nav-tabs {
+            background: rgba(13, 15, 18, 0.9) !important;
+            border-bottom: 1px solid var(--mockup-border) !important;
+            margin-top: 70px !important;
+            padding: 10px 50px !important;
+        }
+
+        .nav-tab.active {
+            background: var(--mockup-red) !important;
+        }
+
+        /* Glassmorphic Mockup Cards */
+        .mockup-card {
+            background: var(--mockup-card-bg);
+            border: 1px solid var(--mockup-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .mockup-card:hover {
+            box-shadow: 0 8px 30px rgba(255, 74, 90, 0.08);
+            border-color: rgba(255, 74, 90, 0.3);
+        }
+
+        .mockup-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            color: var(--mockup-gray);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Dashboard Grid System */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 43% 57%;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .dashboard-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Hero Row */
+        .dashboard-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+        }
+
+        .dashboard-welcome {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Habits checklist layout */
+        .habit-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--mockup-border);
+        }
+
+        .habit-row:last-child {
+            border-bottom: none;
+        }
+
+        .habit-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Custom Checkbox */
+        .custom-cb {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--mockup-border);
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            background: #1c2128;
+            transition: all 0.2s;
+        }
+
+        .custom-cb:checked {
+            background: var(--mockup-red);
+            border-color: var(--mockup-red);
+        }
+
+        .custom-cb:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 11px;
+            color: #ffffff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .habit-title-text {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .habit-streak-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .habit-streak-label {
+            color: var(--mockup-gray);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .habit-streak-bar {
+            width: 60px;
+            height: 6px;
+            background: #1c2128;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .habit-streak-fill {
+            height: 100%;
+            background: var(--mockup-red);
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Streak Summary */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .summary-stat-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .summary-stat-lbl {
+            font-size: 0.75rem;
+            color: var(--mockup-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Quick Journal reflections styling */
+        .journal-textarea {
+            width: 100%;
+            background: #0d0f12;
+            border: 1px solid var(--mockup-border);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .journal-textarea:focus {
+            border-color: var(--mockup-red);
+        }
+
+        .journal-input {
+            width: 100%;
+            background: #0d0f12;
+            border: 1px solid var(--mockup-border);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .journal-input:focus {
+            border-color: var(--mockup-red);
+        }
+
+        .quick-journal-preview {
+            border-top: 1px solid var(--mockup-border);
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+
+        .reflection-preview-title {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .reflection-preview-body {
+            color: var(--mockup-gray);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* Focus Timer SVG elements */
+        .circular-timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .timer-svg-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .timer-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .timer-countdown {
+            font-family: 'Outfit', monospace;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .timer-countdown-lbl {
+            font-size: 0.75rem;
+            color: var(--mockup-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer-status-text {
+            color: var(--mockup-gray);
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Vertical Progress Bar Chart */
+        .progress-chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 180px;
+            padding: 10px 10px 0 10px;
+            border-bottom: 2px solid var(--mockup-border);
+        }
+
+        .progress-bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .progress-bar-fill {
+            width: 25px;
+            background: var(--mockup-red);
+            border-radius: 4px 4px 0 0;
+            height: 0%;
+            transition: height 0.6s cubic-bezier(0.1, 0.76, 0.55, 0.94);
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: attr(data-xp);
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .progress-bar-fill:hover::after {
+            opacity: 1;
+        }
+
+        .progress-chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            padding: 0 10px;
+        }
+
+        .progress-chart-lbl {
+            font-size: 0.75rem;
+            color: var(--mockup-gray);
+            font-weight: 700;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Contribution Heatmap */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(14, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 6px;
+            margin: 15px 0;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            background: #1c2128;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .heatmap-cell-tooltip {
+            visibility: hidden;
+            background-color: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 4px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .heatmap-cell:hover .heatmap-cell-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .heatmap-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--mockup-gray);
+        }
+
+        .heatmap-legends {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .heatmap-legend-box {
+            width: 10px;
+            height: 10px;
+            border-radius: 1px;
+        }
+
+        /* Achievements Badges styling */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .achievement-badge-card {
+            background: #1c2128;
+            border: 1px solid var(--mockup-border);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-badge-card.locked {
+            opacity: 0.25;
+            filter: grayscale(1);
+        }
+
+        .achievement-badge-icon {
+            font-size: 1.5rem;
+            color: var(--mockup-red);
+            margin-bottom: 6px;
+        }
+
+        .achievement-badge-name {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        /* Media responsiveness for dashboard grid */
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--netflix-black); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; opacity: 1;">
+        <div style="width: 50px; height: 50px; border: 5px solid rgba(229, 9, 20, 0.2); border-top-color: var(--netflix-red); border-radius: 50%; animation: loadingSpinner 1s linear infinite; margin-bottom: 20px;"></div>
+        <h2 style="color: var(--netflix-white); font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 1px;">STREAK7</h2>
+    </div>
     <!-- Netflix-style Header -->
     <header class="netflix-header" id="mainHeader">
         <div class="logo">STREAK7</div>
@@ -609,42 +1093,161 @@
 
     <!-- Home Tab Content -->
     <div class="tab-content active" id="home-tab">
-        <div class="hero-section">
-            <h1 class="hero-title" id="welcomeTitle">Welcome Back, Sarvesh!</h1>
-            <p class="hero-subtitle">Track your productivity, build better habits, and level up your life. Let's make today count!</p>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-title">Current Streak</div>
-                    <div class="stat-value" id="currentStreak">7 days</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-title">Total XP</div>
-                    <div class="stat-value" id="totalXP">1,250</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-title">Level</div>
-                    <div class="stat-value" id="userLevel">12</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-title">Best Streak</div>
-                    <div class="stat-value" id="bestStreak">21 days</div>
-                </div>
+        <!-- Hero Welcome Row -->
+        <div class="dashboard-hero">
+            <h1 class="dashboard-welcome" id="welcomeTitle">WELCOME BACK, GUEST USER!</h1>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span id="userLevel" style="background: var(--mockup-red); color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; display: none;">Level 1</span>
+                <button class="btn btn-primary" onclick="resetAllData()" style="padding: 10px 18px; font-size: 0.85rem; border-radius: 6px;"><i class="fas fa-undo"></i> Reset All Data</button>
             </div>
         </div>
 
-        <div class="pomodoro-timer">
-            <h2 style="margin-bottom: 20px; color: var(--netflix-white);">Pomodoro Timer</h2>
-            <div class="timer-display" id="timerDisplay">25:00</div>
-            <div class="timer-controls">
-                <button class="btn btn-primary" id="startTimer">Start Focus</button>
-                <button class="btn btn-secondary" id="resetTimer">Reset</button>
-            </div>
-        </div>
+        <!-- Dashboard Grid Layout -->
+        <div class="dashboard-grid">
+            <!-- Left Column: Habits checklist, Streak Summary, Quick Journal -->
+            <div class="dashboard-col">
+                <!-- Daily Habits Checklist Card -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title" id="dailyHabitsTitle">
+                        DAILY HABITS - TODAY
+                    </div>
+                    <div id="dashboardHabitsContainer">
+                        <!-- Dynamic habit rows will be loaded here by JavaScript -->
+                    </div>
+                </div>
 
-        <h2 class="section-title">Today's Habits</h2>
-        <div class="habits-grid" id="dashboardHabitsContainer">
-            <!-- Dynamic habits will be loaded here -->
+                <!-- Streak Summary Card -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title">STREAK SUMMARY</div>
+                    <div class="summary-grid">
+                        <div>
+                            <div class="summary-stat-val" id="currentStreak">0 days</div>
+                            <div class="summary-stat-lbl">Current</div>
+                        </div>
+                        <div>
+                            <div class="summary-stat-val" id="bestStreak">0 days</div>
+                            <div class="summary-stat-lbl">Longest</div>
+                        </div>
+                        <div>
+                            <div class="summary-stat-val" id="totalXP">0</div>
+                            <div class="summary-stat-lbl">Total XP</div>
+                        </div>
+                        <div>
+                            <div class="summary-stat-val" id="habitAvgCompletions">0.0</div>
+                            <div class="summary-stat-lbl">Average/Day</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Journal / Reflections Card -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title">QUICK JOURNAL / REFLECTIONS</div>
+                    <input type="text" class="journal-input" id="quickJournalTitle" placeholder="Reflection Title (Optional)...">
+                    <textarea class="journal-textarea" id="quickJournalContent" rows="3" placeholder="Write down your daily thoughts and reflections..."></textarea>
+                    <button class="btn btn-primary" id="saveQuickJournalBtn" style="width: 100%; padding: 10px; border-radius: 6px; font-size: 0.85rem;"><i class="fas fa-save"></i> Save Reflection</button>
+                    
+                    <div class="quick-journal-preview">
+                        <div class="reflection-preview-title" id="recentJournalTitle">No recent entries</div>
+                        <div class="reflection-preview-body" id="recentJournalContent">Reflections you log will show up here as a quick preview.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Progress Overview, Heatmap, Circular Timer, Achievements -->
+            <div class="dashboard-col">
+                <!-- Progress Overview Chart -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title" id="progressOverviewTitle">PROGRESS OVERVIEW</div>
+                    <div class="progress-chart-bars" id="weeklyProgressBars">
+                        <!-- Bars dynamically loaded by JavaScript -->
+                    </div>
+                    <div class="progress-chart-labels" id="weeklyProgressLabels">
+                        <!-- Labels dynamically loaded by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Activity Heatmap -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title" id="activityHeatmapTitle">ACTIVITY HEATMAP</div>
+                    <div class="heatmap-grid" id="dashboardHeatmapCells">
+                        <!-- Heatmap cells dynamically loaded by JavaScript -->
+                    </div>
+                    <div class="heatmap-bottom-row">
+                        <div id="heatmapStreakLabel">0 day current streak</div>
+                        <div class="heatmap-legends">
+                            <span style="margin-right: 4px;">Less</span>
+                            <div class="heatmap-legend-box level-0" style="background: #1c2128;"></div>
+                            <div class="heatmap-legend-box level-1" style="background: #3c1618;"></div>
+                            <div class="heatmap-legend-box level-2" style="background: #6b1d22;"></div>
+                            <div class="heatmap-legend-box level-3" style="background: #a82730;"></div>
+                            <div class="heatmap-legend-box level-4" style="background: #ff4a5a;"></div>
+                            <span style="margin-left: 4px;">More</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Timer with SVG circular countdown -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title" id="focusTimerTitle">FOCUS TIMER - WORK SESSION</div>
+                    <div class="circular-timer-container">
+                        <div class="timer-svg-wrapper">
+                            <svg class="timer-svg" width="180" height="180" viewBox="0 0 180 180">
+                                <circle class="timer-svg-circle-bg" cx="90" cy="90" r="80"></circle>
+                                <circle class="timer-svg-circle-fg" id="timerSvgCircle" cx="90" cy="90" r="80" stroke-dasharray="502.6" stroke-dashoffset="0"></circle>
+                            </svg>
+                            <div class="timer-center-text">
+                                <div class="timer-countdown" id="timerDisplay">25:00</div>
+                                <div class="timer-countdown-lbl">Remaining</div>
+                            </div>
+                        </div>
+                        <div class="timer-status-text" id="timerStatusLabel">Focus Session (Work 25:00)</div>
+                        <div class="timer-controls" style="margin-top: 15px; width: 100%; display: flex; justify-content: center; gap: 10px;">
+                            <button class="btn btn-secondary" id="startTimer" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 4px;">Start Focus</button>
+                            <button class="btn btn-secondary" id="resetTimer" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 4px;">Reset</button>
+                            <button class="btn btn-primary" id="startShortBreakBtn" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 4px;">Short Break</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level Achievements & Badges -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title" id="achievementsTitle">LEVEL 1 ACHIEVEMENTS</div>
+                    
+                    <!-- XP progress bar -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #ffffff;">
+                            <span id="nextLevelTag">Level 2</span>
+                            <span id="levelXPPercent">0%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #1c2128; border-radius: 4px; overflow: hidden; position: relative;">
+                            <div style="height: 100%; background: var(--mockup-red); width: 0%; transition: width 0.3s;" id="levelProgressFill"></div>
+                        </div>
+                        <div style="text-align: right; font-size: 0.75rem; color: var(--mockup-gray); margin-top: 5px;" id="levelXPRatio">
+                            0 / 100 XP
+                        </div>
+                    </div>
+
+                    <!-- Badges -->
+                    <div class="badges-grid" id="achievementsBadgesContainer">
+                        <div class="achievement-badge-card locked" id="badgeStreak">
+                            <div class="achievement-badge-icon"><i class="fas fa-fire"></i></div>
+                            <div class="achievement-badge-name">Consistency Champ</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeNight">
+                            <div class="achievement-badge-icon"><i class="fas fa-moon"></i></div>
+                            <div class="achievement-badge-name">Night Owl</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeEarly">
+                            <div class="achievement-badge-icon"><i class="fas fa-sun"></i></div>
+                            <div class="achievement-badge-name">Early Riser</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeTenStreak">
+                            <div class="achievement-badge-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="achievement-badge-name">10-Day Streak</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -706,11 +1309,11 @@
         
         <div class="profile-container">
             <div class="profile-sidebar">
-                <div class="profile-avatar" id="profileAvatar">S</div>
-                <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Sarvesh</h2>
+                <div class="profile-avatar" id="profileAvatar">G</div>
+                <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Guest User</h2>
                 <p style="color: var(--netflix-gray); margin-bottom: 20px;">Productivity Enthusiast</p>
                 <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
-                    Level 12
+                    Level 1
                 </div>
             </div>
             
@@ -719,15 +1322,22 @@
                     <div class="stat-title">Personal Information</div>
                     <div class="profile-detail">
                         <div class="detail-label">Full Name</div>
-                        <div class="detail-value" id="profileFullNameDetail">Sarvesh Kumar</div>
+                        <input type="text" id="profileFullNameInput" placeholder="Enter your name" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
+                        <div class="detail-value" id="profileFullNameDetail">Guest User</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Email</div>
-                        <div class="detail-value" id="profileEmailDetail">sarvesh@example.com</div>
+                        <input type="email" id="profileEmailInput" placeholder="Enter your email" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
+                        <div class="detail-value" id="profileEmailDetail">guest@example.com</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Member Since</div>
-                        <div class="detail-value">January 2024</div>
+                        <div class="detail-value" id="profileMemberSince">January 2024</div>
+                    </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <button id="editProfileBtn" class="btn" style="background: var(--netflix-red); color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-edit"></i> Edit Profile</button>
+                        <button id="saveProfileBtn" class="btn" style="background: #2ecc71; color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; display: none; transition: background 0.2s;"><i class="fas fa-save"></i> Save Changes</button>
+                        <button id="cancelProfileBtn" class="btn" style="background: #7f8c8d; color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; display: none; margin-left: 5px; transition: background 0.2s;"><i class="fas fa-times"></i> Cancel</button>
                     </div>
                 </div>
                 
@@ -735,37 +1345,26 @@
                     <div class="stat-title">Statistics</div>
                     <div class="profile-detail">
                         <div class="detail-label">Total XP Earned</div>
-                        <div class="detail-value" id="profileTotalXP">1,250 XP</div>
+                        <div class="detail-value" id="profileTotalXP">0 XP</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Habits Completed</div>
-                        <div class="detail-value" id="profileHabitsCompleted">47</div>
+                        <div class="detail-value" id="profileHabitsCompleted">0</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Diary Entries</div>
-                        <div class="detail-value" id="profileDiaryEntriesCount">23</div>
+                        <div class="detail-value" id="profileDiaryEntriesCount">0</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Pomodoro Sessions</div>
-                        <div class="detail-value" id="profilePomodorosCount">89</div>
+                        <div class="detail-value" id="profilePomodorosCount">0</div>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-title">Achievements</div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">🔥</div>
-                            <div style="font-size: 0.8rem; color: var(--netflix-white);">7-Day Streak</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">📚</div>
-                            <div style="font-size: 0.8rem; color: var(--netflix-white);">Book Worm</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">⏰</div>
-                            <div style="font-size: 0.8rem; color: var(--netflix-white);">Time Master</div>
-                        </div>
+                    <div id="profileAchievements" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <!-- Achievements will be dynamically loaded here by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -827,14 +1426,15 @@
                 interval: null
             },
             user: {
-                name: 'Sarvesh',
-                email: 'sarvesh@example.com',
-                level: 12,
-                xp: 1250,
-                currentStreak: 7,
-                bestStreak: 21,
+                name: 'Guest User',
+                email: 'guest@example.com',
+                level: 1,
+                xp: 0,
+                currentStreak: 0,
+                bestStreak: 0,
                 lastActiveDate: null,
-                pomodoros: 89
+                pomodoros: 0,
+                memberSince: 'January 2024'
             },
             habits: [
                 { id: 1, name: 'Morning Exercise', xp: 25, description: 'Start your day with energy and focus', completed: false },
@@ -843,23 +1443,7 @@
                 { id: 4, name: 'Coding Practice', xp: 40, description: 'Work on coding projects', completed: false },
                 { id: 5, name: 'Evening Walk', xp: 15, description: '30 minute walk after dinner', completed: false }
             ],
-            diaryEntries: [
-                { 
-                    title: 'Productive Day', 
-                    content: 'Completed all my habits today and finished the project ahead of schedule. Feeling accomplished!', 
-                    date: 'May 27, 2026 at 8:30 PM' 
-                },
-                { 
-                    title: 'Learning New Things', 
-                    content: 'Spent the day learning about new web technologies. The pomodoro technique really helped me stay focused.', 
-                    date: 'May 26, 2026 at 9:15 PM' 
-                },
-                { 
-                    title: 'Weekend Planning', 
-                    content: 'Planning my goals for the upcoming week. Need to focus more on consistency with my exercise routine.', 
-                    date: 'May 25, 2026 at 7:45 PM' 
-                }
-            ],
+            diaryEntries: [],
             history: {}
         };
 
@@ -881,15 +1465,7 @@
         // Initialize default mock history if not present
         function initializeDefaultHistory() {
             if (Object.keys(appState.history).length === 0) {
-                appState.history = {
-                    [getLocalDateOffsetString(1)]: { xp: 85, completedCount: 3, totalCount: 5 },
-                    [getLocalDateOffsetString(2)]: { xp: 60, completedCount: 2, totalCount: 5 },
-                    [getLocalDateOffsetString(3)]: { xp: 110, completedCount: 4, totalCount: 5 },
-                    [getLocalDateOffsetString(4)]: { xp: 30, completedCount: 1, totalCount: 5 },
-                    [getLocalDateOffsetString(5)]: { xp: 95, completedCount: 3, totalCount: 5 },
-                    [getLocalDateOffsetString(6)]: { xp: 75, completedCount: 2, totalCount: 5 },
-                    [getLocalDateOffsetString(7)]: { xp: 120, completedCount: 4, totalCount: 5 }
-                };
+                appState.history = {};
             }
         }
 
@@ -912,13 +1488,7 @@
                     appState.habits = parsed.habits || appState.habits;
                     appState.diaryEntries = parsed.diaryEntries || [];
                     appState.history = parsed.history || {};
-                    
-                    // Auto-migrate old cached username to Sarvesh
-                    if (appState.user.name === 'Koushigan') {
-                        appState.user.name = 'Sarvesh';
-                        appState.user.email = 'sarvesh@example.com';
-                        saveState();
-                    }
+
                 } catch (e) {
                     console.error("Error loading state", e);
                 }
@@ -1049,6 +1619,17 @@
             renderDiaryEntries();
             generateHeatmap();
             generateGraphs();
+
+            // Hide loading overlay with transition
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                setTimeout(() => {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                }, 800);
+            }
         });
 
         function initializeApp() {
@@ -1074,6 +1655,76 @@
             
             document.getElementById('addHabitBtn').addEventListener('click', addNewHabit);
             document.getElementById('saveEntry').addEventListener('click', saveDiaryEntry);
+
+            // Edit Profile listeners
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            const cancelProfileBtn = document.getElementById('cancelProfileBtn');
+            const profileFullNameInput = document.getElementById('profileFullNameInput');
+            const profileEmailInput = document.getElementById('profileEmailInput');
+            const profileFullNameDetail = document.getElementById('profileFullNameDetail');
+            const profileEmailDetail = document.getElementById('profileEmailDetail');
+
+            if (editProfileBtn && saveProfileBtn && cancelProfileBtn && profileFullNameInput && profileEmailInput && profileFullNameDetail && profileEmailDetail) {
+                editProfileBtn.addEventListener('click', () => {
+                    profileFullNameInput.value = (appState.user.name && appState.user.name !== 'Guest User') ? appState.user.name : '';
+                    profileEmailInput.value = (appState.user.email && appState.user.email !== 'guest@example.com') ? appState.user.email : '';
+                    
+                    profileFullNameInput.style.display = 'block';
+                    profileEmailInput.style.display = 'block';
+                    profileFullNameDetail.style.display = 'none';
+                    profileEmailDetail.style.display = 'none';
+                    
+                    editProfileBtn.style.display = 'none';
+                    saveProfileBtn.style.display = 'inline-block';
+                    cancelProfileBtn.style.display = 'inline-block';
+                });
+
+                cancelProfileBtn.addEventListener('click', () => {
+                    profileFullNameInput.style.display = 'none';
+                    profileEmailInput.style.display = 'none';
+                    profileFullNameDetail.style.display = 'block';
+                    profileEmailDetail.style.display = 'block';
+                    
+                    editProfileBtn.style.display = 'inline-block';
+                    saveProfileBtn.style.display = 'none';
+                    cancelProfileBtn.style.display = 'none';
+                });
+
+                saveProfileBtn.addEventListener('click', () => {
+                    const newName = profileFullNameInput.value.trim() || 'Guest User';
+                    const newEmail = profileEmailInput.value.trim() || 'guest@example.com';
+                    
+                    appState.user.name = newName;
+                    appState.user.email = newEmail;
+                    
+                    saveState();
+                    updateUI();
+                    
+                    profileFullNameInput.style.display = 'none';
+                    profileEmailInput.style.display = 'none';
+                    profileFullNameDetail.style.display = 'block';
+                    profileEmailDetail.style.display = 'block';
+                    
+                    editProfileBtn.style.display = 'inline-block';
+                    saveProfileBtn.style.display = 'none';
+                    cancelProfileBtn.style.display = 'none';
+                    
+                    showNotification('Profile updated successfully!');
+                });
+            }
+
+            // Quick Journal button listener
+            const saveQuickJournalBtn = document.getElementById('saveQuickJournalBtn');
+            if (saveQuickJournalBtn) {
+                saveQuickJournalBtn.addEventListener('click', saveQuickJournal);
+            }
+
+            // Short break button listener
+            const startShortBreakBtn = document.getElementById('startShortBreakBtn');
+            if (startShortBreakBtn) {
+                startShortBreakBtn.addEventListener('click', startShortBreak);
+            }
         }
 
         // Timer Functions
@@ -1135,8 +1786,21 @@
         }
 
         function updateTimerDisplay() {
+            const minutes = appState.timer.minutes;
+            const seconds = appState.timer.seconds;
             document.getElementById('timerDisplay').textContent = 
-                `${appState.timer.minutes.toString().padStart(2, '0')}:${appState.timer.seconds.toString().padStart(2, '0')}`;
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Circular SVG stroke-dashoffset update
+            const circle = document.getElementById('timerSvgCircle');
+            if (circle) {
+                const isBreak = document.getElementById('timerStatusLabel').textContent.includes("Break");
+                const totalSec = isBreak ? (5 * 60) : (25 * 60);
+                const currentSec = (minutes * 60) + seconds;
+                const progress = currentSec / totalSec;
+                const offset = 502.6 * (1 - progress);
+                circle.style.strokeDashoffset = offset;
+            }
         }
 
         // Navigation Functions
@@ -1158,21 +1822,27 @@
             container.innerHTML = '';
             
             if (appState.habits.length === 0) {
-                container.innerHTML = `<p style="color: var(--netflix-gray); grid-column: 1/-1; text-align: center; padding: 20px;">No habits added yet. Go to the Habits tab to create one!</p>`;
+                container.innerHTML = `<p style="color: var(--mockup-gray); grid-column: 1/-1; text-align: center; padding: 20px;">No habits added yet. Go to the Habits tab to create one!</p>`;
                 return;
             }
             
             appState.habits.forEach(habit => {
+                const streakVal = habit.streak || 0;
+                const progressPercent = Math.min(100, streakVal * 10);
+                
                 const card = document.createElement('div');
-                card.className = 'habit-card';
+                card.className = 'habit-row';
                 card.innerHTML = `
-                    <div class="habit-header">
-                        <div class="habit-name">${habit.name}</div>
-                        <div class="habit-xp">+${habit.xp} XP</div>
+                    <div class="habit-left">
+                        <input type="checkbox" class="custom-cb habit-checkbox" id="dash-habit-${habit.id}" data-xp="${habit.xp}" data-habit-id="${habit.id}" ${habit.completed ? 'checked' : ''}>
+                        <span class="habit-title-text" style="${habit.completed ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${habit.name}</span>
                     </div>
-                    <p style="color: var(--netflix-gray); margin-bottom: 15px;">${habit.description || ''}</p>
-                    <input type="checkbox" class="habit-checkbox" id="dash-habit-${habit.id}" data-xp="${habit.xp}" data-habit-id="${habit.id}" ${habit.completed ? 'checked' : ''} style="transform: scale(1.2);">
-                    <label for="dash-habit-${habit.id}" style="color: var(--netflix-white); margin-left: 10px;">${habit.completed ? 'Completed!' : 'Mark as completed'}</label>
+                    <div class="habit-streak-bar-container">
+                        <span class="habit-streak-label">Streak: ${streakVal}</span>
+                        <div class="habit-streak-bar">
+                            <div class="habit-streak-fill" style="width: ${progressPercent}%;"></div>
+                        </div>
+                    </div>
                 `;
                 container.appendChild(card);
                 
@@ -1332,49 +2002,196 @@
             awardXP(10);
         }
 
+        function saveQuickJournal() {
+            const titleInput = document.getElementById('quickJournalTitle');
+            const contentInput = document.getElementById('quickJournalContent');
+            
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            
+            if (content === '') {
+                showNotification('Please write something in your reflection.', 'error');
+                return;
+            }
+            
+            const now = new Date();
+            const entryDate = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+            
+            const newEntry = {
+                title: title || 'Untitled Entry',
+                content: content,
+                date: entryDate
+            };
+            
+            appState.diaryEntries.unshift(newEntry);
+            saveState();
+            renderDiaryEntries();
+            updateUI();
+            
+            titleInput.value = '';
+            contentInput.value = '';
+            
+            showNotification('Reflection saved to your diary! 🎉', 'success');
+            awardXP(10);
+        }
+
+        function startShortBreak() {
+            pauseTimer();
+            appState.timer.minutes = 5;
+            appState.timer.seconds = 0;
+            const statusLabel = document.getElementById('timerStatusLabel');
+            if (statusLabel) statusLabel.textContent = "Focus Session (Break 5:00)";
+            updateTimerDisplay();
+            showNotification('Short break started! Relax for 5 minutes. ☕', 'info');
+        }
+
         // Progress Visualization
         function generateHeatmap() {
+            // Populate Progress tab heatmap
             const heatmap = document.getElementById('activityHeatmap');
-            if (!heatmap) return;
-            heatmap.innerHTML = '';
+            if (heatmap) {
+                heatmap.innerHTML = '';
+                renderCells(heatmap, false);
+            }
             
-            // Last 28 days heatmap
+            // Populate Dashboard tab mockup heatmap
+            const dashHeatmap = document.getElementById('dashboardHeatmapCells');
+            if (dashHeatmap) {
+                dashHeatmap.innerHTML = '';
+                renderCells(dashHeatmap, true);
+            }
+            
+            // Update streak label in mockup heatmap
+            const streakLabel = document.getElementById('heatmapStreakLabel');
+            if (streakLabel) {
+                streakLabel.textContent = `${appState.user.currentStreak} day${appState.user.currentStreak === 1 ? '' : 's'} current streak`;
+            }
+        }
+
+        function renderCells(container, isMockup) {
             const days = [];
             for (let i = 27; i >= 0; i--) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
                 days.push(d);
             }
-            
             days.forEach(day => {
                 const dateStr = getLocalDateString(day);
                 const dayHistory = appState.history[dateStr];
                 const completed = dayHistory ? dayHistory.completedCount : 0;
                 
-                const dayElement = document.createElement('div');
-                dayElement.className = 'heatmap-day';
+                const cell = document.createElement('div');
+                cell.className = isMockup ? 'heatmap-cell' : 'heatmap-day';
                 
                 const options = { month: 'short', day: 'numeric' };
                 const formattedDate = day.toLocaleDateString('en-US', options);
-                dayElement.title = `${formattedDate}: ${completed} habit${completed === 1 ? '' : 's'} completed`;
+                const titleText = `${formattedDate}: ${completed} habit${completed === 1 ? '' : 's'} completed`;
                 
-                if (completed > 0) {
-                    dayElement.classList.add('active');
-                    if (completed >= 4) {
-                        dayElement.classList.add('high');
-                    } else if (completed >= 2) {
-                        dayElement.classList.add('medium');
-                    } else {
-                        dayElement.classList.add('low');
+                if (isMockup) {
+                    let level = 0;
+                    if (completed > 0) {
+                        if (completed >= 4) level = 4;
+                        else if (completed >= 2) level = 3;
+                        else level = 2;
+                    }
+                    cell.style.backgroundColor = getHeatmapCellColor(level);
+                    
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'heatmap-cell-tooltip';
+                    tooltip.textContent = titleText;
+                    cell.appendChild(tooltip);
+                } else {
+                    cell.title = titleText;
+                    if (completed > 0) {
+                        cell.classList.add('active');
+                        if (completed >= 4) {
+                            cell.classList.add('high');
+                        } else if (completed >= 2) {
+                            cell.classList.add('medium');
+                        } else {
+                            cell.classList.add('low');
+                        }
                     }
                 }
-                heatmap.appendChild(dayElement);
+                container.appendChild(cell);
             });
+        }
+
+        function getHeatmapCellColor(level) {
+            const colors = {
+                0: '#1c2128',
+                1: '#3c1618',
+                2: '#6b1d22',
+                3: '#a82730',
+                4: '#ff4a5a'
+            };
+            return colors[level] || colors[0];
         }
 
         function generateGraphs() {
             generateXPGraph();
             generateHabitsGraph();
+            generateMockupProgressChart();
+        }
+
+        function generateMockupProgressChart() {
+            const barsContainer = document.getElementById('weeklyProgressBars');
+            const labelsContainer = document.getElementById('weeklyProgressLabels');
+            if (!barsContainer || !labelsContainer) return;
+            
+            barsContainer.innerHTML = '';
+            labelsContainer.innerHTML = '';
+            
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d);
+            }
+            
+            const xpData = days.map(day => {
+                const dateStr = getLocalDateString(day);
+                return appState.history[dateStr] ? appState.history[dateStr].xp : 0;
+            });
+            
+            const maxXP = Math.max(...xpData, 10);
+            
+            const options = { month: 'short', day: 'numeric' };
+            const firstDateStr = days[0].toLocaleDateString('en-US', options);
+            const lastDateStr = days[6].toLocaleDateString('en-US', options);
+            
+            const titleElement = document.getElementById('progressOverviewTitle');
+            if (titleElement) {
+                titleElement.textContent = `PROGRESS OVERVIEW (${firstDateStr.toUpperCase()} - ${lastDateStr.toUpperCase()})`;
+            }
+            
+            days.forEach((day, index) => {
+                const xp = xpData[index];
+                const heightPercent = (xp / maxXP) * 100;
+                
+                const col = document.createElement('div');
+                col.className = 'progress-bar-col';
+                
+                const fill = document.createElement('div');
+                fill.className = 'progress-bar-fill';
+                fill.style.height = `${Math.max(5, heightPercent)}%`;
+                fill.setAttribute('data-xp', `${xp} XP`);
+                
+                col.appendChild(fill);
+                barsContainer.appendChild(col);
+                
+                const weekday = day.toLocaleDateString('en-US', { weekday: 'narrow' });
+                const label = document.createElement('div');
+                label.className = 'progress-chart-lbl';
+                label.textContent = weekday;
+                labelsContainer.appendChild(label);
+            });
         }
 
         function generateXPGraph() {
@@ -1496,11 +2313,30 @@
         }
 
         function updateUI() {
+            // Update Streaks & XP Summary
             document.getElementById('currentStreak').textContent = `${appState.user.currentStreak} day${appState.user.currentStreak === 1 ? '' : 's'}`;
             document.getElementById('totalXP').textContent = appState.user.xp.toLocaleString();
-            document.getElementById('userLevel').textContent = appState.user.level;
+            
+            const userLevelElement = document.getElementById('userLevel');
+            if (userLevelElement) {
+                userLevelElement.textContent = `Level ${appState.user.level}`;
+                userLevelElement.style.display = 'inline-block';
+            }
+            
             document.getElementById('bestStreak').textContent = `${appState.user.bestStreak} day${appState.user.bestStreak === 1 ? '' : 's'}`;
             
+            // Average completions/day
+            const habitAvgCompletions = document.getElementById('habitAvgCompletions');
+            if (habitAvgCompletions) {
+                const daysWithHistory = Object.keys(appState.history).length;
+                let totalCompleted = 0;
+                Object.values(appState.history).forEach(h => {
+                    totalCompleted += h.completedCount || 0;
+                });
+                const avg = daysWithHistory > 0 ? (totalCompleted / daysWithHistory).toFixed(1) : '0.0';
+                habitAvgCompletions.textContent = avg;
+            }
+
             const levelTag = document.getElementById('profileLevelTag');
             if (levelTag) levelTag.textContent = `Level ${appState.user.level}`;
             
@@ -1571,7 +2407,7 @@
             if (headerAvatar) headerAvatar.textContent = firstLetter;
             
             const welcomeTitle = document.getElementById('welcomeTitle');
-            if (welcomeTitle) welcomeTitle.textContent = `Welcome Back, ${appState.user.name}!`;
+            if (welcomeTitle) welcomeTitle.textContent = `WELCOME BACK, ${appState.user.name.toUpperCase()}!`;
             
             const profileAvatar = document.getElementById('profileAvatar');
             if (profileAvatar) profileAvatar.textContent = firstLetter;
@@ -1584,6 +2420,121 @@
             
             const profileEmailDetail = document.getElementById('profileEmailDetail');
             if (profileEmailDetail) profileEmailDetail.textContent = appState.user.email;
+
+            const profileMemberSince = document.getElementById('profileMemberSince');
+            if (profileMemberSince) profileMemberSince.textContent = appState.user.memberSince || 'January 2024';
+
+            // Mockup Achievements and Level Tag updates
+            const achievementsTitle = document.getElementById('achievementsTitle');
+            if (achievementsTitle) {
+                achievementsTitle.textContent = `LEVEL ${appState.user.level} ACHIEVEMENTS`;
+            }
+            
+            const xpInLevel = appState.user.xp % 100;
+            const nextLevelTag = document.getElementById('nextLevelTag');
+            const levelXPPercent = document.getElementById('levelXPPercent');
+            const levelProgressFill = document.getElementById('levelProgressFill');
+            const levelXPRatio = document.getElementById('levelXPRatio');
+            
+            if (nextLevelTag) nextLevelTag.textContent = `Level ${appState.user.level + 1}`;
+            if (levelXPPercent) levelXPPercent.textContent = `${xpInLevel}%`;
+            if (levelProgressFill) levelProgressFill.style.width = `${xpInLevel}%`;
+            if (levelXPRatio) levelXPRatio.textContent = `${xpInLevel} / 100 XP`;
+
+            // Badges unlock checks
+            const badgeStreak = document.getElementById('badgeStreak');
+            const badgeNight = document.getElementById('badgeNight');
+            const badgeEarly = document.getElementById('badgeEarly');
+            const badgeTenStreak = document.getElementById('badgeTenStreak');
+            
+            let totalCompleted = 0;
+            Object.values(appState.history).forEach(h => {
+                totalCompleted += h.completedCount || 0;
+            });
+            
+            if (badgeStreak) {
+                if (appState.user.currentStreak >= 7 || appState.user.bestStreak >= 7) {
+                    badgeStreak.classList.remove('locked');
+                } else {
+                    badgeStreak.classList.add('locked');
+                }
+            }
+            if (badgeNight) {
+                if (appState.user.pomodoros >= 1) {
+                    badgeNight.classList.remove('locked');
+                } else {
+                    badgeNight.classList.add('locked');
+                }
+            }
+            if (badgeEarly) {
+                if (totalCompleted >= 5) {
+                    badgeEarly.classList.remove('locked');
+                } else {
+                    badgeEarly.classList.add('locked');
+                }
+            }
+            if (badgeTenStreak) {
+                if (appState.user.bestStreak >= 10) {
+                    badgeTenStreak.classList.remove('locked');
+                } else {
+                    badgeTenStreak.classList.add('locked');
+                }
+            }
+
+            // Quick Journal recent entries preview
+            const recentJournalTitle = document.getElementById('recentJournalTitle');
+            const recentJournalContent = document.getElementById('recentJournalContent');
+            if (recentJournalTitle && recentJournalContent) {
+                if (appState.diaryEntries.length > 0) {
+                    const latest = appState.diaryEntries[0];
+                    recentJournalTitle.textContent = `${latest.title} (${latest.date.split(' at')[0]})`;
+                    recentJournalContent.textContent = latest.content.substring(0, 85) + (latest.content.length > 85 ? '...' : '');
+                } else {
+                    recentJournalTitle.textContent = "No recent entries";
+                    recentJournalContent.textContent = "Reflections you log will show up here as a quick preview.";
+                }
+            }
+
+            // Update today's date in Habits Checklist header
+            const dailyHabitsTitle = document.getElementById('dailyHabitsTitle');
+            if (dailyHabitsTitle) {
+                const now = new Date();
+                const dayName = now.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+                const monthName = now.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+                const dateNum = now.getDate();
+                dailyHabitsTitle.textContent = `DAILY HABITS - ${dayName}, ${monthName} ${dateNum}`;
+            }
+
+            // Profile Tab Achievements fallback (old UI achievements list)
+            const achievementsContainer = document.getElementById('profileAchievements');
+            if (achievementsContainer) {
+                achievementsContainer.innerHTML = '';
+                const achievements = [];
+                
+                if (appState.user.bestStreak >= 7) {
+                    achievements.push({ icon: '🔥', label: `${appState.user.bestStreak}-Day Streak` });
+                }
+                if (totalCompleted >= 5) {
+                    achievements.push({ icon: '📚', label: 'Consistency Master' });
+                }
+                if (appState.user.pomodoros >= 1) {
+                    achievements.push({ icon: '⏰', label: 'Focus Champion' });
+                }
+                
+                if (achievements.length === 0) {
+                    achievementsContainer.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--netflix-gray); padding: 15px; font-size: 0.9rem;">Complete habits and pomodoro sessions to unlock achievements!</div>';
+                } else {
+                    achievements.forEach(ach => {
+                        const card = document.createElement('div');
+                        card.style.cssText = "text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;";
+                        card.innerHTML = `
+                            <div style="font-size: 2rem; margin-bottom: 10px;">${ach.icon}</div>
+                            <div style="font-size: 0.8rem; color: var(--netflix-white);">${ach.label}</div>
+                        `;
+                        achievementsContainer.appendChild(card);
+                    });
+                }
+            }
         }
 
         function showXPEarnedAnimation(element, xp) {
@@ -1638,5 +2589,9 @@
             }, 4000);
         }
     </script>
+    <!-- Footer Section -->
+    <footer style="text-align: center; padding: 40px; margin-top: 50px; border-top: 1px solid var(--netflix-light-gray); color: var(--netflix-gray); font-size: 0.95rem; background: var(--netflix-dark);">
+        <p>© 2026 Streak7 Pro. All Rights Reserved. Built by Sarvesh. <a href="https://github.com/Sarvesh0508/Habit-Tracker" target="_blank" style="color: var(--netflix-red); text-decoration: none; font-weight: bold; margin-left: 10px;"><i class="fab fa-github"></i> View on GitHub</a></p>
+    </footer>
 </body>
 </html>
