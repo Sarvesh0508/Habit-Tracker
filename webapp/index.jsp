@@ -101,7 +101,9 @@
         .tab-content {
             display: none;
             padding: 40px 50px;
-            min-height: 80vh;
+            min-height: calc(100vh - 75px);
+            margin-top: 75px;
+            box-sizing: border-box;
         }
         
         .tab-content.active {
@@ -1066,6 +1068,66 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Header navigation and timer SVG styles */
+        .header-nav-tab {
+            color: #8c96a3;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            box-sizing: border-box;
+            border-bottom: 3px solid transparent;
+        }
+        .header-nav-tab:hover {
+            color: #ffffff;
+        }
+        .header-nav-tab.active {
+            color: #ffffff !important;
+            border-bottom-color: #ff4a5a !important;
+        }
+        .timer-svg {
+            transform: rotate(-90deg);
+        }
+        .timer-svg-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 8px;
+        }
+        .timer-svg-circle-fg {
+            fill: none;
+            stroke: var(--mockup-red);
+            stroke-width: 8px;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear;
+        }
+        @media (max-width: 768px) {
+            .netflix-header {
+                padding: 0 15px !important;
+                height: 65px !important;
+            }
+            .header-nav {
+                gap: 12px !important;
+            }
+            .header-nav-tab {
+                font-size: 0.8rem;
+                height: 65px;
+            }
+            .logo span {
+                display: none;
+            }
+            .header-user-info {
+                display: none;
+            }
+            .tab-content {
+                margin-top: 65px !important;
+                padding: 20px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1074,32 +1136,47 @@
         <div style="width: 50px; height: 50px; border: 5px solid rgba(229, 9, 20, 0.2); border-top-color: var(--netflix-red); border-radius: 50%; animation: loadingSpinner 1s linear infinite; margin-bottom: 20px;"></div>
         <h2 style="color: var(--netflix-white); font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 1px;">STREAK7</h2>
     </div>
-    <!-- Netflix-style Header -->
-    <header class="netflix-header" id="mainHeader">
-        <div class="logo">STREAK7</div>
-        <div class="user-menu">
-            <div class="profile-avatar" id="headerAvatar" style="width: 40px; height: 40px; font-size: 1rem;">S</div>
+    <!-- Premium Header with Inline Tabs -->
+    <header class="netflix-header" id="mainHeader" style="position: fixed; top: 0; left: 0; right: 0; height: 75px; z-index: 1000; background: rgba(21, 24, 30, 0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--mockup-border); padding: 0 50px !important; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+        <!-- Logo -->
+        <div class="logo" style="display: flex; align-items: center; cursor: pointer;" onclick="switchTabDirect('home')">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px; transform: skewX(-10deg);">
+                <line x1="2" y1="8" x2="8" y2="8" stroke="#ff4a5a" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="4" y1="12" x2="8" y2="12" stroke="#ff4a5a" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="6" y1="16" x2="8" y2="16" stroke="#ff4a5a" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M9 6H21L13 20H9L15 10H9V6Z" fill="#ff4a5a"/>
+            </svg>
+            <span style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; text-transform: none;">Streak<span style="color: #ff4a5a;">7</span></span>
+        </div>
+
+        <!-- Inline Navigation Tabs -->
+        <div class="header-nav" style="display: flex; gap: 30px; height: 100%; align-items: center;">
+            <div class="header-nav-tab active" data-tab="home" onclick="switchTabDirect('home')">Dashboard</div>
+            <div class="header-nav-tab" data-tab="habits" onclick="switchTabDirect('habits')">Habits</div>
+            <div class="header-nav-tab" data-tab="progress" onclick="switchTabDirect('progress')">Goals</div>
+            <div class="header-nav-tab" data-tab="diary" onclick="switchTabDirect('diary')">Community</div>
+            <div class="header-nav-tab" data-tab="profile" onclick="switchTabDirect('profile')">Rewards</div>
+        </div>
+
+        <!-- User Profile info -->
+        <div class="header-profile" style="display: flex; align-items: center; cursor: pointer;" onclick="switchTabDirect('profile')">
+            <div class="profile-avatar" id="headerAvatar" style="width: 36px; height: 36px; font-size: 0.95rem; border-radius: 50%; background: var(--mockup-red); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px; border: 1.5px solid rgba(255,255,255,0.2); transition: transform 0.2s;">G</div>
+            <div class="header-user-info" style="display: flex; flex-direction: column; text-align: left; margin-right: 8px;">
+                <span id="headerUserName" style="font-size: 0.85rem; font-weight: 700; color: #ffffff; line-height: 1.2;">Guest User</span>
+                <span id="headerUserLevel" style="font-size: 0.7rem; color: #8c96a3; font-weight: 500; margin-top: 1px;">Level 1</span>
+            </div>
+            <i class="fas fa-chevron-down" style="font-size: 0.75rem; color: #8c96a3;"></i>
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="nav-tabs">
-        <div class="nav-tab active" data-tab="home">Dashboard</div>
-        <div class="nav-tab" data-tab="habits">Habits</div>
-        <div class="nav-tab" data-tab="diary">Diary</div>
-        <div class="nav-tab" data-tab="profile">Profile</div>
-        <div class="nav-tab" data-tab="progress">Progress</div>
-    </nav>
+
 
     <!-- Home Tab Content -->
     <div class="tab-content active" id="home-tab">
         <!-- Hero Welcome Row -->
-        <div class="dashboard-hero">
-            <h1 class="dashboard-welcome" id="welcomeTitle">WELCOME BACK, GUEST USER!</h1>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <span id="userLevel" style="background: var(--mockup-red); color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; display: none;">Level 1</span>
-                <button class="btn btn-primary" onclick="resetAllData()" style="padding: 10px 18px; font-size: 0.85rem; border-radius: 6px;"><i class="fas fa-undo"></i> Reset All Data</button>
-            </div>
+        <div class="dashboard-hero" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">
+            <h1 class="dashboard-welcome" id="welcomeTitle" style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; margin: 0;">WELCOME BACK, GUEST USER!</h1>
+            <button class="btn btn-primary" id="startStreakBtn" style="background: #ff4a5a; border: none; padding: 12px 24px; font-weight: bold; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;"><i class="fas fa-play" style="margin-right: 6px;"></i> Start Your Streak</button>
         </div>
 
         <!-- Dashboard Grid Layout -->
@@ -1135,6 +1212,45 @@
                         <div>
                             <div class="summary-stat-val" id="habitAvgCompletions">0.0</div>
                             <div class="summary-stat-lbl">Average/Day</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level Achievements & Badges -->
+                <div class="mockup-card">
+                    <div class="mockup-card-title" id="achievementsTitle">LEVEL 1 ACHIEVEMENTS</div>
+                    
+                    <!-- XP progress bar -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #ffffff;">
+                            <span id="nextLevelTag">Level 2</span>
+                            <span id="levelXPPercent">0%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #1c2128; border-radius: 4px; overflow: hidden; position: relative;">
+                            <div style="height: 100%; background: var(--mockup-red); width: 0%; transition: width 0.3s;" id="levelProgressFill"></div>
+                        </div>
+                        <div style="text-align: right; font-size: 0.75rem; color: var(--mockup-gray); margin-top: 5px;" id="levelXPRatio">
+                            0 / 100 XP
+                        </div>
+                    </div>
+
+                    <!-- Badges -->
+                    <div class="badges-grid" id="achievementsBadgesContainer">
+                        <div class="achievement-badge-card locked" id="badgeStreak">
+                            <div class="achievement-badge-icon"><i class="fas fa-fire"></i></div>
+                            <div class="achievement-badge-name">Consistency Champ</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeNight">
+                            <div class="achievement-badge-icon"><i class="fas fa-moon"></i></div>
+                            <div class="achievement-badge-name">Night Owl</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeEarly">
+                            <div class="achievement-badge-icon"><i class="fas fa-sun"></i></div>
+                            <div class="achievement-badge-name">Early Riser</div>
+                        </div>
+                        <div class="achievement-badge-card locked" id="badgeTenStreak">
+                            <div class="achievement-badge-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="achievement-badge-name">10-Day Streak</div>
                         </div>
                     </div>
                 </div>
@@ -1209,44 +1325,7 @@
                     </div>
                 </div>
 
-                <!-- Level Achievements & Badges -->
-                <div class="mockup-card">
-                    <div class="mockup-card-title" id="achievementsTitle">LEVEL 1 ACHIEVEMENTS</div>
-                    
-                    <!-- XP progress bar -->
-                    <div style="margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #ffffff;">
-                            <span id="nextLevelTag">Level 2</span>
-                            <span id="levelXPPercent">0%</span>
-                        </div>
-                        <div style="width: 100%; height: 8px; background: #1c2128; border-radius: 4px; overflow: hidden; position: relative;">
-                            <div style="height: 100%; background: var(--mockup-red); width: 0%; transition: width 0.3s;" id="levelProgressFill"></div>
-                        </div>
-                        <div style="text-align: right; font-size: 0.75rem; color: var(--mockup-gray); margin-top: 5px;" id="levelXPRatio">
-                            0 / 100 XP
-                        </div>
-                    </div>
-
-                    <!-- Badges -->
-                    <div class="badges-grid" id="achievementsBadgesContainer">
-                        <div class="achievement-badge-card locked" id="badgeStreak">
-                            <div class="achievement-badge-icon"><i class="fas fa-fire"></i></div>
-                            <div class="achievement-badge-name">Consistency Champ</div>
-                        </div>
-                        <div class="achievement-badge-card locked" id="badgeNight">
-                            <div class="achievement-badge-icon"><i class="fas fa-moon"></i></div>
-                            <div class="achievement-badge-name">Night Owl</div>
-                        </div>
-                        <div class="achievement-badge-card locked" id="badgeEarly">
-                            <div class="achievement-badge-icon"><i class="fas fa-sun"></i></div>
-                            <div class="achievement-badge-name">Early Riser</div>
-                        </div>
-                        <div class="achievement-badge-card locked" id="badgeTenStreak">
-                            <div class="achievement-badge-icon"><i class="fas fa-trophy"></i></div>
-                            <div class="achievement-badge-name">10-Day Streak</div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -1308,13 +1387,14 @@
         <h1 class="section-title">My Profile</h1>
         
         <div class="profile-container">
-            <div class="profile-sidebar">
+            <div class="profile-sidebar" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                 <div class="profile-avatar" id="profileAvatar">G</div>
                 <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Guest User</h2>
                 <p style="color: var(--netflix-gray); margin-bottom: 20px;">Productivity Enthusiast</p>
-                <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
+                <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block; margin-bottom: 15px;">
                     Level 1
                 </div>
+                <button class="btn btn-secondary" onclick="resetAllData()" style="width: 100%; padding: 10px; font-size: 0.85rem; border-color: #ff4a5a; color: #ff4a5a; font-weight: bold; border-radius: 6px; cursor: pointer; transition: all 0.2s;"><i class="fas fa-trash-alt" style="margin-right: 6px;"></i> Reset All Data</button>
             </div>
             
             <div class="profile-details">
@@ -1446,6 +1526,27 @@
             diaryEntries: [],
             history: {}
         };
+        // Inline tab switching logic
+        function switchTabDirect(tabId) {
+            document.querySelectorAll('.header-nav-tab').forEach(t => {
+                if (t.getAttribute('data-tab') === tabId) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(c => {
+                if (c.getAttribute('id') === `${tabId}-tab`) {
+                    c.classList.add('active');
+                } else {
+                    c.classList.remove('active');
+                }
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
 
         // Helper date string mapping
         function getLocalDateString(date = new Date()) {
@@ -1655,6 +1756,20 @@
             
             document.getElementById('addHabitBtn').addEventListener('click', addNewHabit);
             document.getElementById('saveEntry').addEventListener('click', saveDiaryEntry);
+            
+            // Start Your Streak button listener
+            const startStreakBtn = document.getElementById('startStreakBtn');
+            if (startStreakBtn) {
+                startStreakBtn.addEventListener('click', () => {
+                    const timerCard = document.getElementById('focusTimerTitle');
+                    if (timerCard) {
+                        timerCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        if (!appState.timer.running) {
+                            toggleTimer();
+                        }
+                    }
+                });
+            }
 
             // Edit Profile listeners
             const editProfileBtn = document.getElementById('editProfileBtn');
@@ -2418,8 +2533,14 @@
             const profileFullNameDetail = document.getElementById('profileFullNameDetail');
             if (profileFullNameDetail) profileFullNameDetail.textContent = appState.user.name;
             
-            const profileEmailDetail = document.getElementById('profileEmailDetail');
+const profileEmailDetail = document.getElementById('profileEmailDetail');
             if (profileEmailDetail) profileEmailDetail.textContent = appState.user.email;
+
+            // Header dynamic details
+            const headerUserName = document.getElementById('headerUserName');
+            if (headerUserName) headerUserName.textContent = appState.user.name;
+            const headerUserLevel = document.getElementById('headerUserLevel');
+            if (headerUserLevel) headerUserLevel.textContent = `Level ${appState.user.level}`;
 
             const profileMemberSince = document.getElementById('profileMemberSince');
             if (profileMemberSince) profileMemberSince.textContent = appState.user.memberSince || 'January 2024';
