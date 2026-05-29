@@ -741,7 +741,7 @@
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Member Since</div>
-                        <div class="detail-value">January 2024</div>
+                        <div class="detail-value" id="profileMemberSince">January 2024</div>
                     </div>
                     <div style="margin-top: 15px; text-align: right;">
                         <button id="editProfileBtn" class="btn" style="background: var(--netflix-red); color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-edit"></i> Edit Profile</button>
@@ -772,19 +772,8 @@
                 
                 <div class="stat-card">
                     <div class="stat-title">Achievements</div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">🔥</div>
-                            <div style="font-size: 0.8rem; color: var(--netflix-white);">7-Day Streak</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">📚</div>
-                            <div style="font-size: 0.8rem; color: var(--netflix-white);">Book Worm</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">⏰</div>
-                            <div style="font-size: 0.8rem; color: var(--netflix-white);">Time Master</div>
-                        </div>
+                    <div id="profileAchievements" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <!-- Achievements will be dynamically loaded here by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -853,7 +842,8 @@
                 currentStreak: 0,
                 bestStreak: 0,
                 lastActiveDate: null,
-                pomodoros: 0
+                pomodoros: 0,
+                memberSince: 'January 2024'
             },
             habits: [
                 { id: 1, name: 'Morning Exercise', xp: 25, description: 'Start your day with energy and focus', completed: false },
@@ -1642,6 +1632,46 @@
             
             const profileEmailDetail = document.getElementById('profileEmailDetail');
             if (profileEmailDetail) profileEmailDetail.textContent = appState.user.email;
+
+            const profileMemberSince = document.getElementById('profileMemberSince');
+            if (profileMemberSince) profileMemberSince.textContent = appState.user.memberSince || 'January 2024';
+
+            // Dynamic Achievements
+            const achievementsContainer = document.getElementById('profileAchievements');
+            if (achievementsContainer) {
+                achievementsContainer.innerHTML = '';
+                const achievements = [];
+                
+                // Let's calculate total habits completed from history
+                let totalCompleted = 0;
+                Object.values(appState.history).forEach(h => {
+                    totalCompleted += h.completedCount || 0;
+                });
+                
+                if (appState.user.bestStreak >= 7) {
+                    achievements.push({ icon: '🔥', label: `${appState.user.bestStreak}-Day Streak` });
+                }
+                if (totalCompleted >= 5) {
+                    achievements.push({ icon: '📚', label: 'Consistency Master' });
+                }
+                if (appState.user.pomodoros >= 1) {
+                    achievements.push({ icon: '⏰', label: 'Focus Champion' });
+                }
+                
+                if (achievements.length === 0) {
+                    achievementsContainer.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--netflix-gray); padding: 15px; font-size: 0.9rem;">Complete habits and pomodoro sessions to unlock achievements!</div>';
+                } else {
+                    achievements.forEach(ach => {
+                        const card = document.createElement('div');
+                        card.style.cssText = "text-align: center; padding: 15px; background: var(--netflix-black); border-radius: 8px;";
+                        card.innerHTML = `
+                            <div style="font-size: 2rem; margin-bottom: 10px;">${ach.icon}</div>
+                            <div style="font-size: 0.8rem; color: var(--netflix-white);">${ach.label}</div>
+                        `;
+                        achievementsContainer.appendChild(card);
+                    });
+                }
+            }
         }
 
         function showXPEarnedAnimation(element, xp) {

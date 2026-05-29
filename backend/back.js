@@ -95,17 +95,28 @@ const dbGet = (query, params = []) => {
 app.post("/addHabit", async (req, res) => {
   try {
     const { name, xp, description } = req.body;
-    if (!name) {
-      return res.status(400).json({ error: "Habit name is required" });
+    if (typeof name !== "string" || !name.trim()) {
+      return res.status(400).json({ error: "Habit name must be a non-empty string" });
+    }
+    if (name.length > 100) {
+      return res.status(400).json({ error: "Habit name cannot exceed 100 characters" });
+    }
+
+    const xpVal = Number(xp);
+    if (isNaN(xpVal) || xpVal < 5 || xpVal > 100) {
+      return res.status(400).json({ error: "XP must be a number between 5 and 100" });
+    }
+
+    const descVal = description || "";
+    if (descVal.length > 500) {
+      return res.status(400).json({ error: "Description cannot exceed 500 characters" });
     }
 
     const id = Date.now().toString();
-    const xpVal = Number(xp) || 25;
-    const descVal = description || "";
 
     await dbRun(
       "INSERT INTO habits (id, name, xp, description, completed) VALUES (?, ?, ?, ?, 0)",
-      [id, name, xpVal, descVal]
+      [id, name.trim(), xpVal, descVal.trim()]
     );
 
     // Fetch and increment total XP
@@ -151,17 +162,24 @@ app.post("/deleteHabit", async (req, res) => {
 app.post("/addDiary", async (req, res) => {
   try {
     const { title, content } = req.body;
-    if (!content) {
-      return res.status(400).json({ error: "Diary content required" });
+    if (typeof content !== "string" || !content.trim()) {
+      return res.status(400).json({ error: "Diary content must be a non-empty string" });
+    }
+    if (content.length > 5000) {
+      return res.status(400).json({ error: "Diary content cannot exceed 5000 characters" });
+    }
+
+    const titleVal = title || "Untitled Entry";
+    if (typeof titleVal !== "string" || titleVal.length > 200) {
+      return res.status(400).json({ error: "Title cannot exceed 200 characters" });
     }
 
     const id = Date.now().toString();
-    const titleVal = title || "Untitled Entry";
     const dateStr = new Date().toLocaleString();
 
     await dbRun(
       "INSERT INTO diary_entries (id, title, content, date) VALUES (?, ?, ?, ?)",
-      [id, titleVal, content, dateStr]
+      [id, titleVal.trim(), content.trim(), dateStr]
     );
     res.json({ message: "Diary entry added successfully" });
   } catch (err) {
