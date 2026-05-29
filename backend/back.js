@@ -137,7 +137,10 @@ app.post("/deleteHabit", async (req, res) => {
       return res.status(400).json({ error: "Habit ID is required" });
     }
 
-    await dbRun("DELETE FROM habits WHERE id = ?", [id]);
+    const result = await dbRun("DELETE FROM habits WHERE id = ?", [id]);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: "Habit not found" });
+    }
     res.json({ message: "Habit deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });

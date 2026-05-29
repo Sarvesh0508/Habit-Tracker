@@ -5,7 +5,8 @@
   "main": "back.js",
   "type": "module",
   "scripts": {
-    "start": "node back.js"
+    "start": "node back.js",
+    "test": "node --test test/api.test.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
