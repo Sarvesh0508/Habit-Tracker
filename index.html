@@ -613,7 +613,7 @@
     <!-- Home Tab Content -->
     <div class="tab-content active" id="home-tab">
         <div class="hero-section">
-            <h1 class="hero-title" id="welcomeTitle">Welcome Back, Sarvesh!</h1>
+            <h1 class="hero-title" id="welcomeTitle">Welcome Back, Guest User!</h1>
             <p class="hero-subtitle">Track your productivity, build better habits, and level up your life. Let's make today count!</p>
             
             <div class="stats-grid">
@@ -709,8 +709,8 @@
         
         <div class="profile-container">
             <div class="profile-sidebar">
-                <div class="profile-avatar" id="profileAvatar">S</div>
-                <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Sarvesh</h2>
+                <div class="profile-avatar" id="profileAvatar">G</div>
+                <h2 id="profileName" style="color: var(--netflix-white); margin-bottom: 10px;">Guest User</h2>
                 <p style="color: var(--netflix-gray); margin-bottom: 20px;">Productivity Enthusiast</p>
                 <div id="profileLevelTag" style="background: var(--netflix-red); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block;">
                     Level 12
@@ -722,15 +722,22 @@
                     <div class="stat-title">Personal Information</div>
                     <div class="profile-detail">
                         <div class="detail-label">Full Name</div>
+                        <input type="text" id="profileFullNameInput" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
                         <div class="detail-value" id="profileFullNameDetail">Sarvesh Kumar</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Email</div>
+                        <input type="email" id="profileEmailInput" value="" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--netflix-light-gray); color: var(--netflix-white); padding: 8px 12px; border-radius: 4px; font-size: 0.95rem; width: 100%; display: none; margin-top: 5px; box-sizing: border-box;">
                         <div class="detail-value" id="profileEmailDetail">sarvesh@example.com</div>
                     </div>
                     <div class="profile-detail">
                         <div class="detail-label">Member Since</div>
                         <div class="detail-value">January 2024</div>
+                    </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <button id="editProfileBtn" class="btn" style="background: var(--netflix-red); color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-edit"></i> Edit Profile</button>
+                        <button id="saveProfileBtn" class="btn" style="background: #2ecc71; color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; display: none; transition: background 0.2s;"><i class="fas fa-save"></i> Save Changes</button>
+                        <button id="cancelProfileBtn" class="btn" style="background: #7f8c8d; color: white; font-weight: bold; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; display: none; margin-left: 5px; transition: background 0.2s;"><i class="fas fa-times"></i> Cancel</button>
                     </div>
                 </div>
                 
@@ -830,8 +837,8 @@
                 interval: null
             },
             user: {
-                name: 'Sarvesh',
-                email: 'sarvesh@example.com',
+                name: 'Guest User',
+                email: 'guest@example.com',
                 level: 12,
                 xp: 1250,
                 currentStreak: 7,
@@ -915,13 +922,7 @@
                     appState.habits = parsed.habits || appState.habits;
                     appState.diaryEntries = parsed.diaryEntries || [];
                     appState.history = parsed.history || {};
-                    
-                    // Auto-migrate old cached username to Sarvesh
-                    if (appState.user.name === 'Koushigan') {
-                        appState.user.name = 'Sarvesh';
-                        appState.user.email = 'sarvesh@example.com';
-                        saveState();
-                    }
+
                 } catch (e) {
                     console.error("Error loading state", e);
                 }
@@ -1077,6 +1078,64 @@
             
             document.getElementById('addHabitBtn').addEventListener('click', addNewHabit);
             document.getElementById('saveEntry').addEventListener('click', saveDiaryEntry);
+
+            // Edit Profile listeners
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            const cancelProfileBtn = document.getElementById('cancelProfileBtn');
+            const profileFullNameInput = document.getElementById('profileFullNameInput');
+            const profileEmailInput = document.getElementById('profileEmailInput');
+            const profileFullNameDetail = document.getElementById('profileFullNameDetail');
+            const profileEmailDetail = document.getElementById('profileEmailDetail');
+
+            if (editProfileBtn && saveProfileBtn && cancelProfileBtn && profileFullNameInput && profileEmailInput && profileFullNameDetail && profileEmailDetail) {
+                editProfileBtn.addEventListener('click', () => {
+                    profileFullNameInput.value = appState.user.name || 'Guest User';
+                    profileEmailInput.value = appState.user.email || 'guest@example.com';
+                    
+                    profileFullNameInput.style.display = 'block';
+                    profileEmailInput.style.display = 'block';
+                    profileFullNameDetail.style.display = 'none';
+                    profileEmailDetail.style.display = 'none';
+                    
+                    editProfileBtn.style.display = 'none';
+                    saveProfileBtn.style.display = 'inline-block';
+                    cancelProfileBtn.style.display = 'inline-block';
+                });
+
+                cancelProfileBtn.addEventListener('click', () => {
+                    profileFullNameInput.style.display = 'none';
+                    profileEmailInput.style.display = 'none';
+                    profileFullNameDetail.style.display = 'block';
+                    profileEmailDetail.style.display = 'block';
+                    
+                    editProfileBtn.style.display = 'inline-block';
+                    saveProfileBtn.style.display = 'none';
+                    cancelProfileBtn.style.display = 'none';
+                });
+
+                saveProfileBtn.addEventListener('click', () => {
+                    const newName = profileFullNameInput.value.trim() || 'Guest User';
+                    const newEmail = profileEmailInput.value.trim() || 'guest@example.com';
+                    
+                    appState.user.name = newName;
+                    appState.user.email = newEmail;
+                    
+                    saveState();
+                    updateUI();
+                    
+                    profileFullNameInput.style.display = 'none';
+                    profileEmailInput.style.display = 'none';
+                    profileFullNameDetail.style.display = 'block';
+                    profileEmailDetail.style.display = 'block';
+                    
+                    editProfileBtn.style.display = 'inline-block';
+                    saveProfileBtn.style.display = 'none';
+                    cancelProfileBtn.style.display = 'none';
+                    
+                    showNotification('Profile updated successfully!');
+                });
+            }
         }
 
         // Timer Functions
