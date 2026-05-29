@@ -2,23 +2,23 @@
 
 **⚡ Live Demo:** [https://habit-tracker-ifzv.vercel.app/](https://habit-tracker-ifzv.vercel.app/)
 
-![Streak7 Dashboard Preview](screenshot.png)
-
-Streak7 is a modern, responsive, and feature-rich gamified productivity dashboard designed to help users establish habits, document daily reflections, and optimize focus using the Pomodoro technique. The project features full responsiveness, dynamic charts, progress analytics, and dual-mode persistence (browser LocalStorage for standalone use and a RESTful backend API).
+Streak7 is a modern, responsive, and feature-rich gamified productivity dashboard designed to help users establish habits, document daily reflections, and optimize focus using the Pomodoro technique. The project features a unified dark-mode matte glassmorphic design, balanced grid system layouts, dynamic charts, progress analytics, and dual-mode persistence (browser LocalStorage for standalone use and a RESTful backend API).
 
 ---
 
 ## 🚀 Key Features
 
-*   **Gamified XP and Leveling System:** Earn XP by completing habits (+15 to +40 XP depending on difficulty), focusing with the Pomodoro timer (+15 XP), or writing diary entries (+10 XP). Level up automatically for every 100 XP accumulated!
-*   **Persistent Habit Checklist:** Add, track, and complete daily habits with check-off mechanics.
-*   **Editable User Profile:** Customize your profile's Full Name and Email directly within the user details card (with zero-flash placeholder fallbacks to "Guest User").
-*   **Premium Visual Page Loader:** Fully responsive Netflix-style loading overlay with dynamic CSS spinner to prevent initial Layout Flash (FOUC).
-*   **Activity Heatmap:** Visualizes daily habit completions over the past 28 days using a GitHub-style contribution grid.
-*   **Interactive Analytics Graphs:** Beautiful bar charts displaying daily XP gains and habit completion rates for the past 7 days.
-*   **Integrated Pomodoro Timer:** High-intensity interval focus timer with a progress pulse animation and completion reward.
-*   **Personal Diary Journal:** Record thoughts, goals, and reflections with a title and timestamp.
-*   **Comprehensive Test Suite:** Backend testing with native Node.js asserts covering routes validation, data updates, and 404 responses.
+*   **Premium Header Navigation:** Fully integrated inline tab navigation (`Dashboard`, `Habits`, `Goals` -> Progress, `Community` -> Diary, `Rewards` -> Profile) embedded inside the top fixed header with a custom logo container (stylized red '7' SVG icon + text), dynamic avatar letter rendering, user name, level, and dropdown caret.
+*   **Evenly Distributed Columns (No Wasted Space):** Balanced grid system column heights by placing the Checklist, Streak Summary, Achievements, and reflections in the left column, while analytics graphs and the Pomodoro timer sit in the right column, leaving zero empty spaces.
+*   **Gamified XP and Leveling System:** Earn XP by completing habits (+15 to +40 XP depending on difficulty), focusing with the Pomodoro timer (+15 XP), or writing diary reflections (+10 XP). Level up automatically for every 100 XP accumulated!
+*   **Persistent Habit Checklist:** Track and complete daily habits with custom-styled checkboxes, individual completion streak tracking, and horizontal percentage progress bars.
+*   **Quick Journal / Reflections Card:** Directly log diary thoughts from the dashboard tab. Features input titles, description textareas, one-click reflections save, and a dynamic "Recent Entries" preview card synced with the main Diary tab.
+*   **Interactive Pomodoro Timer:** High-intensity interval focus timer featuring a circular SVG progress ring countdown animation, short break controls, pulse timer effects, and automatic focus completions.
+*   **Achievements & Badges:** Progress tracking bar showing XP progress toward the next level, and 4 toggleable achievement badges (*Consistency Champ*, *Night Owl*, *Early Riser*, *10-Day Streak*) that unlock dynamically based on user stats.
+*   **Editable User Profile:** Customize your profile's Full Name and Email directly within the user details card (with zero-flash placeholder fallbacks to "Guest User" and standalone client persistence).
+*   **Activity Heatmap:** Visualizes daily habit completions over the past 28 days using a GitHub-style contribution grid with color intensity ranges.
+*   **Interactive Analytics Graphs:** Beautiful vertical bar charts displaying daily XP gains and habit completion rates for the past 7 days.
+*   **Comprehensive Test Suite:** Backend testing with native Node.js asserts covering routes validation, parameters check-in, and 404 error responses.
 *   **Recruiter-Friendly Architecture:** Implements a multi-layered design. Runs immediately in any browser using LocalStorage persistence, or connects to the Node.js/SQLite REST API or Java JSP Controller.
 
 ---
@@ -26,7 +26,7 @@ Streak7 is a modern, responsive, and feature-rich gamified productivity dashboar
 ## 🛠️ Technology Stack & Architecture
 
 ### Frontend (Client Side)
-*   **UI/UX:** Vanilla HTML5, CSS3 Custom Properties (Netflix-style dark mode theme), CSS Grid/Flexbox layouts.
+*   **UI/UX:** Vanilla HTML5, CSS3 Custom Properties (matte dark theme), CSS Grid/Flexbox layouts, glassmorphic frosted-glass cards, and custom Google Fonts ('Inter' and 'Outfit').
 *   **State Machine:** React-like central application state (`appState`) with a pub-sub UI rendering cycle.
 *   **Visualizations:** Custom DOM-based rendering for charts and heatmaps (no bulky external charting libraries).
 *   **Micro-Animations:** Fluid CSS transitions, floating keyframe animations (`+XP` float-up effects), pulse timers, and level-up flashes.
@@ -45,6 +45,9 @@ Streak7 is a modern, responsive, and feature-rich gamified productivity dashboar
 
 ```text
 Habit-Tracker/
+├── .github/
+│   └── workflows/
+│       └── test.yml       # Node.js CI test workflow for GitHub Actions
 ├── backend/
 │   ├── back.js            # Node.js/Express SQLite REST Server
 │   ├── package.json       # Node.js dependencies configuration
@@ -54,6 +57,7 @@ Habit-Tracker/
 │   │   └── web.xml        # Servlet web app deployment descriptor
 │   ├── app.js             # Client-side API fetch wrapper
 │   └── index.jsp          # Main frontend app page (HTML, CSS, JS Engine)
+├── index.html             # Standalone frontend client page (HTML, CSS, JS Engine)
 └── README.md              # Documentation
 ```
 
