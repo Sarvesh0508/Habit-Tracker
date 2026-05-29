@@ -780,19 +780,19 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-title">This Week's XP</div>
-                <div class="stat-value" id="progressWeekXP">325</div>
+                <div class="stat-value" id="progressWeekXP">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">Habits Completed</div>
-                <div class="stat-value" id="progressTotalHabits">14</div>
+                <div class="stat-value" id="progressTotalHabits">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">Productivity Score</div>
-                <div class="stat-value" id="progressProductivityScore">87%</div>
+                <div class="stat-value" id="progressProductivityScore">0%</div>
             </div>
             <div class="stat-card">
                 <div class="stat-title">Focus Time</div>
-                <div class="stat-value" id="progressFocusTime">12.5h</div>
+                <div class="stat-value" id="progressFocusTime">0h</div>
             </div>
         </div>
 
