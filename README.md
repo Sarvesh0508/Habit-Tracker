@@ -8,10 +8,13 @@ Streak7 is a modern, responsive, and feature-rich gamified productivity dashboar
 
 *   **Gamified XP and Leveling System:** Earn XP by completing habits (+15 to +40 XP depending on difficulty), focusing with the Pomodoro timer (+15 XP), or writing diary entries (+10 XP). Level up automatically for every 100 XP accumulated!
 *   **Persistent Habit Checklist:** Add, track, and complete daily habits with check-off mechanics.
+*   **Editable User Profile:** Customize your profile's Full Name and Email directly within the user details card (with zero-flash placeholder fallbacks to "Guest User").
+*   **Premium Visual Page Loader:** Fully responsive Netflix-style loading overlay with dynamic CSS spinner to prevent initial Layout Flash (FOUC).
 *   **Activity Heatmap:** Visualizes daily habit completions over the past 28 days using a GitHub-style contribution grid.
 *   **Interactive Analytics Graphs:** Beautiful bar charts displaying daily XP gains and habit completion rates for the past 7 days.
 *   **Integrated Pomodoro Timer:** High-intensity interval focus timer with a progress pulse animation and completion reward.
 *   **Personal Diary Journal:** Record thoughts, goals, and reflections with a title and timestamp.
+*   **Comprehensive Test Suite:** Backend testing with native Node.js asserts covering routes validation, data updates, and 404 responses.
 *   **Recruiter-Friendly Architecture:** Implements a multi-layered design. Runs immediately in any browser using LocalStorage persistence, or connects to the Node.js/SQLite REST API or Java JSP Controller.
 
 ---
@@ -55,7 +58,7 @@ Habit-Tracker/
 ## 🏁 Quick Start & Setup
 
 ### Option A: Standalone Browser Mode (No Server Required)
-Simply double-click the [index.jsp](file:///C:/Users/SARVESH/.gemini/antigravity/scratch/Habit-Tracker/webapp/index.jsp) file or open it in any modern browser. All features—including habit completions, Pomodoro sessions, diary entries, history logs, heatmap activity, and streaks—are automatically saved to your browser's `LocalStorage`.
+Simply double-click the `index.html` file in the root of the repository or open it in any modern browser. All features—including habit completions, Pomodoro sessions, diary entries, history logs, heatmap activity, streaks, and editable profiles—are automatically saved to your browser's `LocalStorage`.
 
 ### Option B: Node.js SQLite API Server
 1. Navigate to the `backend` directory:
@@ -71,6 +74,18 @@ Simply double-click the [index.jsp](file:///C:/Users/SARVESH/.gemini/antigravity
    npm start
    ```
    The backend API will start running at `http://localhost:8080` and initialize a SQLite database file `streak7.db` automatically.
+
+### 🧪 Running Tests
+The backend includes a zero-dependency integration test suite using Node's built-in test runner.
+1. Navigate to the `backend` directory:
+   ```bash
+   cd backend
+   ```
+2. Run the test command:
+   ```bash
+   npm test
+   ```
+   This will spin up a temporary server on port `9000`, validate the API endpoints (including POST actions, parameters validation, 404 status codes for invalid IDs), and cleanly shut down the server.
 
 ### Option C: Java Web Application (Tomcat Servlet)
 1. Deploy the `webapp` folder into the `webapps` directory of your Apache Tomcat installation (e.g., inside XAMPP Tomcat).
