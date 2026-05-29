@@ -1735,6 +1735,13 @@
 
         // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
+        // Always hide overlay after 4 seconds as failsafe
+        setTimeout(() => {
+            const ov = document.getElementById('loadingOverlay');
+            if (ov) { ov.style.opacity='0'; ov.style.pointerEvents='none'; setTimeout(()=>ov.remove(),500); }
+        }, 4000);
+
+        try {
             loadState();
             initializeApp();
             setupEventListeners();
@@ -1745,7 +1752,9 @@
             generateHeatmap();
             generateGraphs();
 
-            // Hide loading overlay with transition
+            
+        } catch(e) { console.error('App init error:', e); }
+        // Hide loading overlay with transition
             const loadingOverlay = document.getElementById('loadingOverlay');
             if (loadingOverlay) {
                 setTimeout(() => {
@@ -2736,17 +2745,9 @@ const profileEmailDetail = document.getElementById('profileEmailDetail');
     
         // ── Reset All Data ─────────────────────────────────────────────
         function resetAllData() {
-            if (!confirm('Are you sure you want to reset ALL data? This cannot be undone.')) return;
-            const defaultState = {
-                user: { name: 'Guest User', email: '', level: 1, xp: 0, joinDate: new Date().toISOString().split('T')[0] },
-                habits: [],
-                history: {},
-                diaryEntries: [],
-                timerSessions: 0,
-                pomodoroCount: 0,
-                settings: { dailyGoal: 5 }
-            };
-            localStorage.setItem('streak7AppState', JSON.stringify(defaultState));
+            if (!confirm('Reset ALL data? This cannot be undone.')) return;
+            localStorage.removeItem('streak7_app_state');
+            localStorage.clear();
             location.reload();
         }
         // ───────────────────────────────────────────────────────────────
