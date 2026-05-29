@@ -45,35 +45,81 @@ public class BackendController extends HttpServlet {
         }
     }
 
+    // ---- Helper to Escape JSON String ----
+    private String escapeJson(Object val) {
+        if (val == null) return "";
+        return val.toString()
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\t", "\\t");
+    }
+
     // ---- Habit Section ----
     private void addHabit(HttpServletRequest req, PrintWriter out) {
         String name = req.getParameter("name");
         String xpVal = req.getParameter("xp");
+        String description = req.getParameter("description");
+        if (description == null) description = "";
 
         if (name == null || name.trim().isEmpty()) {
             out.print("{\"error\":\"Habit name is required\"}");
             return;
         }
+        if (name.length() > 100) {
+            out.print("{\"error\":\"Habit name cannot exceed 100 characters\"}");
+            return;
+        }
+        if (description.length() > 500) {
+            out.print("{\"error\":\"Description cannot exceed 500 characters\"}");
+            return;
+        }
 
-        int xp = (xpVal != null && !xpVal.isEmpty()) ? Integer.parseInt(xpVal) : 25;
+        int xp = 25;
+        if (xpVal != null && !xpVal.isEmpty()) {
+            try {
+                xp = Integer.parseInt(xpVal);
+                if (xp < 5 || xp > 100) {
+                    out.print("{\"error\":\"XP must be a number between 5 and 100\"}");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                out.print("{\"error\":\"XP must be a number between 5 and 100\"}");
+                return;
+            }
+        } else {
+            out.print("{\"error\":\"XP must be a number between 5 and 100\"}");
+            return;
+        }
 
         Map<String, Object> habit = new HashMap<>();
         habit.put("id", UUID.randomUUID().toString());
-        habit.put("name", name);
+        habit.put("name", name.trim());
         habit.put("xp", xp);
+        habit.put("description", description.trim());
+        habit.put("completed", false);
         habits.add(habit);
 
         totalXP += xp;
         streak++;
         if (streak > bestStreak) bestStreak = streak;
 
-        out.print("{\"message\":\"Habit added successfully\",\"totalXP\":" + totalXP + "}");
+        out.print("{\"message\":\"Habit added successfully\",\"id\":\"" + habit.get("id") + "\",\"totalXP\":" + totalXP + "}");
     }
 
     private void deleteHabit(HttpServletRequest req, PrintWriter out) {
         String id = req.getParameter("id");
-        habits.removeIf(h -> h.get("id").equals(id));
-        out.print("{\"message\":\"Habit deleted\"}");
+        if (id == null || id.isEmpty()) {
+            out.print("{\"error\":\"Habit ID is required\"}");
+            return;
+        }
+        boolean removed = habits.removeIf(h -> h.get("id").equals(id));
+        if (!removed) {
+            out.print("{\"error\":\"Habit not found\"}");
+            return;
+        }
+        out.print("{\"message\":\"Habit deleted successfully\"}");
     }
 
     // ---- Diary Section ----
@@ -81,10 +127,28 @@ public class BackendController extends HttpServlet {
         String title = req.getParameter("title");
         String content = req.getParameter("content");
 
+        if (content == null || content.trim().isEmpty()) {
+            out.print("{\"error\":\"Diary content must be a non-empty string\"}");
+            return;
+        }
+        if (content.length() > 5000) {
+            out.print("{\"error\":\"Diary content cannot exceed 5000 characters\"}");
+            return;
+        }
+
+        String titleVal = title == null ? "Untitled Entry" : title.trim();
+        if (titleVal.isEmpty()) {
+            titleVal = "Untitled Entry";
+        }
+        if (titleVal.length() > 200) {
+            out.print("{\"error\":\"Title cannot exceed 200 characters\"}");
+            return;
+        }
+
         Map<String, Object> entry = new HashMap<>();
         entry.put("id", UUID.randomUUID().toString());
-        entry.put("title", title == null ? "Untitled" : title);
-        entry.put("content", content);
+        entry.put("title", titleVal);
+        entry.put("content", content.trim());
         entry.put("date", new Date().toString());
 
         diaryEntries.add(entry);
@@ -103,8 +167,11 @@ public class BackendController extends HttpServlet {
         for (int i = 0; i < habits.size(); i++) {
             Map<String, Object> h = habits.get(i);
             json.append("{\"id\":\"").append(h.get("id"))
-                .append("\",\"name\":\"").append(h.get("name"))
-                .append("\",\"xp\":").append(h.get("xp")).append("}");
+                .append("\",\"name\":\"").append(escapeJson(h.get("name")))
+                .append("\",\"xp\":").append(h.get("xp"))
+                .append(",\"description\":\"").append(escapeJson(h.get("description")))
+                .append("\",\"completed\":").append(h.get("completed") != null && (boolean)h.get("completed") ? "true" : "false")
+                .append("}");
             if (i < habits.size() - 1) json.append(",");
         }
         json.append("],");
@@ -113,9 +180,9 @@ public class BackendController extends HttpServlet {
         for (int i = 0; i < diaryEntries.size(); i++) {
             Map<String, Object> d = diaryEntries.get(i);
             json.append("{\"id\":\"").append(d.get("id"))
-                .append("\",\"title\":\"").append(d.get("title"))
-                .append("\",\"content\":\"").append(d.get("content"))
-                .append("\",\"date\":\"").append(d.get("date")).append("\"}");
+                .append("\",\"title\":\"").append(escapeJson(d.get("title")))
+                .append("\",\"content\":\"").append(escapeJson(d.get("content")))
+                .append("\",\"date\":\"").append(escapeJson(d.get("date"))).append("\"}");
             if (i < diaryEntries.size() - 1) json.append(",");
         }
         json.append("]}");
