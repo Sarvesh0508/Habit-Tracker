@@ -101,8 +101,8 @@
         .tab-content {
             display: none;
             padding: 40px 50px;
-            min-height: calc(100vh - 75px);
-            margin-top: 75px;
+            min-height: calc(100vh - 110px);
+            margin-top: 110px;
             box-sizing: border-box;
         }
         
@@ -621,21 +621,9 @@
         }
 
         .netflix-header {
-            background: rgba(13, 15, 18, 0.8) !important;
-            backdrop-filter: blur(10px);
+            background: #0d0f12 !important;
             border-bottom: 1px solid var(--mockup-border);
             padding: 15px 50px !important;
-        }
-
-        .nav-tabs {
-            background: rgba(13, 15, 18, 0.9) !important;
-            border-bottom: 1px solid var(--mockup-border) !important;
-            margin-top: 70px !important;
-            padding: 10px 50px !important;
-        }
-
-        .nav-tab.active {
-            background: var(--mockup-red) !important;
         }
 
         /* Glassmorphic Mockup Cards */
@@ -1072,23 +1060,27 @@
         /* Header navigation and timer SVG styles */
         .header-nav-tab {
             color: #8c96a3;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: color 0.2s;
-            height: 75px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 6px 14px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            position: relative;
-            box-sizing: border-box;
-            border-bottom: 3px solid transparent;
+            justify-content: center;
+            border-bottom: none !important;
         }
         .header-nav-tab:hover {
             color: #ffffff;
         }
         .header-nav-tab.active {
+            background-color: #ff4a5a !important;
             color: #ffffff !important;
-            border-bottom-color: #ff4a5a !important;
+            box-shadow: 0 4px 12px rgba(255, 74, 90, 0.3);
         }
         .timer-svg {
             transform: rotate(-90deg);
@@ -1107,24 +1099,27 @@
         }
         @media (max-width: 768px) {
             .netflix-header {
-                padding: 0 15px !important;
-                height: 65px !important;
+                padding: 10px 20px !important;
+                height: 95px !important;
+            }
+            .logo-text {
+                font-size: 1.4rem !important;
             }
             .header-nav {
-                gap: 12px !important;
+                gap: 8px !important;
+                margin-top: 8px !important;
             }
             .header-nav-tab {
-                font-size: 0.8rem;
-                height: 65px;
+                font-size: 0.7rem !important;
+                padding: 4px 8px !important;
             }
-            .logo span {
-                display: none;
-            }
-            .header-user-info {
-                display: none;
+            .profile-avatar {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.95rem !important;
             }
             .tab-content {
-                margin-top: 65px !important;
+                margin-top: 95px !important;
                 padding: 20px !important;
             }
         }
@@ -1179,35 +1174,22 @@
         <h2 style="color: var(--netflix-white); font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 1px;">STREAK7</h2>
     </div>
     <!-- Premium Header with Inline Tabs -->
-    <header class="netflix-header" id="mainHeader" style="position: fixed; top: 0; left: 0; right: 0; height: 75px; z-index: 1000; background: rgba(21, 24, 30, 0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--mockup-border); padding: 0 50px !important; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
-        <!-- Logo -->
-        <div class="logo" style="display: flex; align-items: center; cursor: pointer;" onclick="switchTabDirect('home')">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px; transform: skewX(-10deg);">
-                <line x1="2" y1="8" x2="8" y2="8" stroke="#ff4a5a" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="4" y1="12" x2="8" y2="12" stroke="#ff4a5a" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="6" y1="16" x2="8" y2="16" stroke="#ff4a5a" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M9 6H21L13 20H9L15 10H9V6Z" fill="#ff4a5a"/>
-            </svg>
-            <span style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; text-transform: none;">Streak<span style="color: #ff4a5a;">7</span></span>
-        </div>
-
-        <!-- Inline Navigation Tabs -->
-        <div class="header-nav" style="display: flex; gap: 30px; height: 100%; align-items: center;">
-            <div class="header-nav-tab active" data-tab="home" onclick="switchTabDirect('home')">Dashboard</div>
-            <div class="header-nav-tab" data-tab="habits" onclick="switchTabDirect('habits')">Habits</div>
-            <div class="header-nav-tab" data-tab="progress" onclick="switchTabDirect('progress')">Goals</div>
-            <div class="header-nav-tab" data-tab="diary" onclick="switchTabDirect('diary')">Community</div>
-            <div class="header-nav-tab" data-tab="profile" onclick="switchTabDirect('profile')">Rewards</div>
-        </div>
-
-        <!-- User Profile info -->
-        <div class="header-profile" style="display: flex; align-items: center; cursor: pointer;" onclick="switchTabDirect('profile')">
-            <div class="profile-avatar" id="headerAvatar" style="width: 36px; height: 36px; font-size: 0.95rem; border-radius: 50%; background: var(--mockup-red); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px; border: 1.5px solid rgba(255,255,255,0.2); transition: transform 0.2s;">G</div>
-            <div class="header-user-info" style="display: flex; flex-direction: column; text-align: left; margin-right: 8px;">
-                <span id="headerUserName" style="font-size: 0.85rem; font-weight: 700; color: #ffffff; line-height: 1.2;">Guest User</span>
-                <span id="headerUserLevel" style="font-size: 0.7rem; color: #8c96a3; font-weight: 500; margin-top: 1px;">Level 1</span>
+    <header class="netflix-header" id="mainHeader" style="position: fixed; top: 0; left: 0; right: 0; height: 110px; z-index: 1000; background: #0d0f12 !important; border-bottom: 1px solid var(--mockup-border); padding: 15px 50px !important; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+        <!-- Left side: contains Logo on top, Nav Tabs below -->
+        <div class="header-left-col" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; align-items: flex-start;">
+            <div class="logo-text" style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: #ff4a5a !important; text-transform: uppercase; letter-spacing: 1.5px; line-height: 1; cursor: pointer; user-select: none;" onclick="switchTabDirect('home')">STREAK7</div>
+            <div class="header-nav" style="display: flex; gap: 15px; align-items: center; margin-top: 12px;">
+                <div class="header-nav-tab active" data-tab="home" onclick="switchTabDirect('home')">DASHBOARD</div>
+                <div class="header-nav-tab" data-tab="habits" onclick="switchTabDirect('habits')">HABITS</div>
+                <div class="header-nav-tab" data-tab="diary" onclick="switchTabDirect('diary')">DIARY</div>
+                <div class="header-nav-tab" data-tab="profile" onclick="switchTabDirect('profile')">PROFILE</div>
+                <div class="header-nav-tab" data-tab="progress" onclick="switchTabDirect('progress')">PROGRESS</div>
             </div>
-            <i class="fas fa-chevron-down" style="font-size: 0.75rem; color: #8c96a3;"></i>
+        </div>
+
+        <!-- Right side: User Profile Avatar -->
+        <div class="header-right-col" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+            <div class="profile-avatar" id="headerAvatar" style="width: 38px; height: 38px; border-radius: 50%; background-color: #ff4a5a; color: #ffffff; border: 2px solid #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s;" onclick="switchTabDirect('profile')">G</div>
         </div>
     </header>
 
