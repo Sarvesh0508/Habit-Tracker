@@ -96,7 +96,7 @@ app.post("/addHabit", async (req, res) => {
   try {
     const { name, xp, description } = req.body;
     if (typeof name !== "string" || !name.trim()) {
-      return res.status(400).json({ error: "Habit name must be a non-empty string" });
+      return res.status(400).json({ error: "Habit name is required" });
     }
     if (name.length > 100) {
       return res.status(400).json({ error: "Habit name cannot exceed 100 characters" });
